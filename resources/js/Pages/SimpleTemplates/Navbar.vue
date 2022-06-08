@@ -89,7 +89,11 @@
                     <TransparentDropDown
                         :list="[
                             ['Cuentas', 'accounts', companyName],
-                            ['Configurar Integración', 'accounts_config', companyName],
+                            [
+                                'Configurar Integración',
+                                'accounts_config',
+                                companyName,
+                            ],
                             ['Comprobante', 'receipt', companyName],
                         ]"
                         value="Contabilidad"

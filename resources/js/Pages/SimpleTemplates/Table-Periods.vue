@@ -225,9 +225,7 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import "primevue/resources/themes/vela-blue/theme.css";
-import "primevue/resources/primevue.css";
-import "primeicons/primeicons.css";
+
 import ModalPeriod from "./Modal-Period.vue";
 import { FilterMatchMode } from "primevue/api";
 import axios from "axios";

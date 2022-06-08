@@ -19,14 +19,16 @@ class Notes_Lot extends Pivot
     {
         return $date->timezone('America/La_Paz')->format('d/m/Y H:i');
     }
-    public function articles()
-    {
-        return $this->belongsTo(Articles::class, 'id_article', 'id_article');
-    }
+
     public function notes()
     {
         return $this->belongsTo(Notes::class, 'id_note', 'id_note');
     }
+    public function sales()
+    {
+        return $this->hasMany(Notes_Details::class, 'id_note', 'id_note');
+    }
+
 
     public function idnotelot(): Attribute
     {

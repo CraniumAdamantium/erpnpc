@@ -51,7 +51,6 @@
                             ></path>
                         </svg>
                     </button>
-
                     <button
                         class="disabled:bg-gray-500 bg-yellow-400 hover:bg-yellow-500 text-white rounded-lg px-4 py-2.5"
                         v-tooltip.bottom="{
@@ -78,6 +77,30 @@
                                 stroke-width="2"
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                             ></path>
+                        </svg>
+                    </button>
+                    <button
+                        class="text-white disabled:bg-gray-500 bg-sky-500 hover:bg-sky-600 rounded-lg px-4 py-2.5"
+                        v-tooltip.bottom="{
+                            value: 'Lotes de artículo',
+                            class: 'text-center',
+                        }"
+                        @click="data.showLotes = !data.showLotes"
+                        :disabled="Object.keys(data.selected_item).length == 0"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                            />
                         </svg>
                     </button>
                     <button
@@ -112,7 +135,12 @@
             </Column>
             <Column header="Cantidad" :sortable="true" field="quantity">
             </Column>
-            <Column header="Precio" :sortable="true" field="sale_price">
+            <Column
+                header="Precio"
+                field="sale_price"
+                :sortable="true"
+                bodyStyle="text-align:right;"
+            >
             </Column>
             <Column header="Categorias" :sortable="false" field="categories">
             </Column>
@@ -192,6 +220,15 @@
                 </button>
             </div>
         </form>
+    </Dialog>
+    <Dialog
+        :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+        :style="{ width: '50vw' }"
+        :modal="true"
+        :header="'Artículo: ' + data.selected_item.name"
+        v-model:visible="data.showLotes"
+        :closeOnEscape="false"
+    >
     </Dialog>
 </template>
 <script>
@@ -365,6 +402,7 @@ export default {
         /* Modal control and selected item */
         const data = reactive({
             showModal: false,
+            showLotes: false,
             selected_item: {},
         });
         /* ============================ */

@@ -27,7 +27,8 @@ class Notes extends Model
     ];
     public function notes_details()
     {
-        return $this->hasMany(Notes_Details::class, 'id_note', 'id_note');
+        return $this->belongsToMany(Articles::class, Notes_Details::class, 'id_note', 'id_article')
+            ->withPivot('id_note_lot', 'id_note', 'id_article', 'quantity', 'sale_price', 'deleted_at');
     }
     public function notes_lot()
     {
@@ -35,6 +36,7 @@ class Notes extends Model
             //->wherePivotNull('deleted_at')
             ->withPivot('id_note_lot', 'id_note', 'id_article', 'entry_date', 'expiration_date', 'quantity', 'purchase_price', 'stock', 'deleted_at');
     }
+    
 
     protected $casts = [
         'date' => 'datetime:d/m/Y ',

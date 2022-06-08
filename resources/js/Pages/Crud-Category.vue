@@ -183,7 +183,7 @@ import Dialog from "primevue/dialog";
 import Navbar from "./SimpleTemplates/Navbar";
 import { computed, onMounted, reactive } from "@vue/runtime-core";
 import { Inertia } from "@inertiajs/inertia";
-import { Confirm, Notify, Loading } from "notiflix";
+import { Notify, Loading } from "notiflix";
 const focus = {
     mounted: (el) => el.focus(),
 };
@@ -356,6 +356,13 @@ export default {
             );
         };
         const deleteCat = () => {
+            if (
+                data.selectedCategory.id_category == null ||
+                data.selectedCategory.id_category == ""
+            ) {
+                Notify.failure("Selecciona una categoría");
+                return;
+            }
             Loading.standard({
                 clickToClose: false,
                 svgSize: "200",

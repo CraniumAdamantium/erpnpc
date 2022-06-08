@@ -1,22 +1,33 @@
 <template>
     <!-- Here a sidebar if needed -->
-
     <div class="px-4 mt-5">
         <div class="w-12/12 ml-auto mr-auto mt-2 transform">
             <div class="flex">
                 <h4 class="text-2xl text-white">
-                    Creando Nota de Compra | Nota de compra Nº
-                    {{ values.number }}
+                    {{
+                        Object.keys(details).length > 0 ? "Viendo " : "Creando "
+                    }}
+                    nota de compra Nº
+                    {{
+                        Object.keys(details).length > 0
+                            ? details.number
+                            : values.number
+                    }}
+                    {{
+                        Object.keys(details).length > 0
+                            ? " | " + details.deleted_at
+                            : null
+                    }}
                 </h4>
                 <div class="flex ml-auto items-center">
                     <button
-                        class="bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg text-sm px-3 py-3 text-center mr-2"
+                        class="bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg text-sm p-2 text-center mr-2"
                         @click="goback()"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
+                            width="24"
+                            height="24"
                             fill="white"
                             viewBox="0 0 16 16"
                         >
@@ -28,9 +39,11 @@
                     <button
                         class="bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm p-2 text-center mr-2"
                         @click="save()"
+                        :disabled="Object.keys(details).length > 0"
                     >
                         <svg
-                            class="w-6 h-6"
+                            width="24"
+                            height="24"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -45,11 +58,13 @@
                         </svg>
                     </button>
                     <button
+                        v-if="Object.keys(details).length > 0"
                         class="disabled:bg-indigo-800 bg-indigo-700 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm px-2 py-2 text-center mr-2"
                         id="showReport"
                     >
                         <svg
-                            class="w-6 h-6"
+                            width="24"
+                            height="24"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -64,11 +79,17 @@
                         </svg>
                     </button>
                     <button
+                        v-if="
+                            Object.keys(details).length > 0 &&
+                            details.deleted_at == 'Activo'
+                        "
                         id="trash_receipt"
                         class="text-white disabled:bg-red-800 bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm px-2 py-2 text-center"
+                        @click="emitDelete()"
                     >
                         <svg
-                            class="w-6 h-6"
+                            width="24"
+                            height="24"
                             fill="none"
                             stroke="white"
                             viewBox="0 0 24 24"
@@ -91,6 +112,7 @@
             <div class="flex flex-col mt-2 mr-2">
                 <p class="text-base text-white">Fecha</p>
                 <Calendar
+                    :disabled="Object.keys(details).length > 0"
                     :inputStyle="'background: white; color: black;'"
                     v-model="values.date"
                     dateFormat="dd/mm/yy"
@@ -99,7 +121,8 @@
             <div class="flex flex-col m-2">
                 <p class="text-base text-white">Descripción</p>
                 <input
-                    class="p-2 text-black rounded-sm"
+                    :disabled="Object.keys(details).length > 0"
+                    class="p-2 text-black rounded-sm disabled:bg-gray-500 disabled:text-white"
                     v-model="values.description"
                 />
             </div>
@@ -112,7 +135,8 @@
         </div>
         <div class="w-11/12 mx-auto">
             <DataTable :value="values.table">
-                <template #header>
+                <template #empty> No hay artículos, añade uno! </template>
+                <template #header v-if="Object.keys(details).length == 0">
                     <div
                         class="flex flex-row justify-between gap-2 items-center"
                     >
@@ -211,7 +235,11 @@
                     header="Precio"
                     :sortable="true"
                 ></Column>
-                <Column header="Eliminar" field="number">
+                <Column
+                    header="Eliminar"
+                    field="number"
+                    v-if="Object.keys(details).length == 0"
+                >
                     <template #body="slotProps">
                         <button
                             @click="delete_that(slotProps.data.number)"
@@ -219,6 +247,27 @@
                         >
                             X
                         </button>
+                    </template>
+                </Column>
+                <Column
+                    header="Estado"
+                    field="deleted_at"
+                    v-if="Object.keys(details).length > 0"
+                >
+                    <template #body="slotProps">
+                        <span
+                            :class="
+                                slotProps.data.deleted_at == null
+                                    ? 'bg-green-500 px-2 py-1 rounded-lg text-white'
+                                    : 'bg-red-500 px-2 py-1 rounded-lg text-white'
+                            "
+                        >
+                            {{
+                                slotProps.data.deleted_at == null
+                                    ? "Activo"
+                                    : "Anulado en " + slotProps.data.deleted_at
+                            }}
+                        </span>
                     </template>
                 </Column>
             </DataTable>
@@ -232,7 +281,7 @@ import Dropdown from "primevue/dropdown";
 import dayjs from "dayjs";
 import InputText from "primevue/inputtext";
 import { reactive } from "@vue/reactivity";
-import { computed, watch } from "@vue/runtime-core";
+import { computed, watch, ref, onMounted } from "@vue/runtime-core";
 import Calendar from "primevue/calendar";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -250,8 +299,12 @@ export default {
             type: Object,
             required: true,
         },
+        details: {
+            type: Object,
+            default: {},
+        },
     },
-    emits: ["goback"],
+    emits: ["goback", "delete"],
     setup(props, { emit }) {
         const makeDate = (date) => {
             return dayjs(date).format("DD/MM/YYYY") == "Invalid Date"
@@ -263,6 +316,7 @@ export default {
         };
         const articles_c = computed({
             get() {
+                if (Object.keys(props.details).length > 0) return;
                 return props.company.articles
                     .map((article) => {
                         return {
@@ -282,9 +336,7 @@ export default {
         const actualLoteNumber = computed(() => {
             let totalForThis = 0;
             props.company.notes.forEach((note) => {
-
                 note.notes_lot.forEach((detail) => {
-                    
                     if (detail.id_article == valuesToPush.article.value) {
                         totalForThis += 1;
                     }
@@ -294,18 +346,17 @@ export default {
         });
         const values = reactive({
             number: computed(() => {
-                return (
-                    Math.max(
-                        ...//Filter notes by type
-                        props.company.notes
-                            .filter((note) => {
-                                return note.type == 1;
-                            })
-                            .map((note) => {
-                                return note.number;
-                            })
-                    ) + 1
-                );
+                return props.company.notes.length == 0
+                    ? 1
+                    : Math.max(
+                          ...props.company.notes
+                              .filter((note) => {
+                                  return note.type == 1;
+                              })
+                              .map((note) => {
+                                  return note.number;
+                              })
+                      ) + 1;
             }),
             date: "",
             description: "",
@@ -366,7 +417,6 @@ export default {
                         ? "Sin expiración"
                         : makeDate(valuesToPush.expiration_date),
             });
-            //Then loop through values.table and add number
 
             blank();
         };
@@ -449,8 +499,35 @@ export default {
                 },
             });
         };
+        onMounted(() => {
+            console.log("Montado", values.table);
+            if (Object.keys(props.details).length > 0) {
+                //If details is set, then just show it and disable everything
+                props.details.lot.forEach((lote) => {
+                    values.table.push({
+                        number: lote.pivot.id_note_lot,
+                        article_name: lote.name,
+                        expiration_date_c:
+                            lote.pivot.expiration_date == null
+                                ? "Sin fecha de expiración"
+                                : lote.pivot.expiration_date,
+                        quantity: lote.pivot.quantity,
+                        purchase_price: lote.pivot.purchase_price,
+                        stock: lote.pivot.stock,
+                        deleted_at: lote.pivot.deleted_at,
+                    });
+                });
+                values.description = props.details.description;
+                values.date = props.details.date;
+            }
+        });
 
+        const emitDelete = () => {
+            emit("delete");
+            emit("goback");
+        };
         return {
+            emitDelete,
             actualLoteNumber,
             save,
             delete_that,
@@ -465,3 +542,10 @@ export default {
     },
 };
 </script>
+<style>
+.p-inputtext:disabled {
+    background-color: rgb(107 114 128) !important;
+    opacity: 1 !important;
+    color: white !important;
+}
+</style>

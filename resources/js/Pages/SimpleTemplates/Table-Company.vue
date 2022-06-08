@@ -104,9 +104,7 @@
     </div>
 </template>
 <script>
-import "primevue/resources/themes/vela-blue/theme.css";
-import "primevue/resources/primevue.css";
-import "primeicons/primeicons.css";
+
 import Column from "primevue/column";
 import DataTable from "primevue/datatable/DataTable";
 import InputText from "primevue/inputtext";

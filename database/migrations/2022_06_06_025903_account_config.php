@@ -26,8 +26,6 @@ return new class extends Migration
                 $table->foreignId('id_account_it_p')->constrained('accounts', 'id_account')->onDelete('cascade');
                 $table->tinyInteger('integration')->default(0); //0 no 1 yes
                 $table->unique(['id_company', 'integration']); //No double state
-
-
             }
         );
     }

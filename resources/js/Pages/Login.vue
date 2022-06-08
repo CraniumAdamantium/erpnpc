@@ -1,6 +1,4 @@
 <template>
-
-
     <div class="flex items-center justify-center" style="min-height: 90vh">
         <div class="p-12 bg-white mx-auto rounded-2xl w-100">
             <div class="mb-4">

@@ -241,9 +241,7 @@
     </div>
 </template>
 <script>
-import "primevue/resources/themes/vela-blue/theme.css";
-import "primevue/resources/primevue.css";
-import "primeicons/primeicons.css";
+
 import InputText from "primevue/inputtext";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";

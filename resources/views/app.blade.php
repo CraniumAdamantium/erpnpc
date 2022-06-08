@@ -8,6 +8,8 @@
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
     @routes
     <script src="{{ mix('/js/app.js') }}" defer></script>
+    {{-- <script src="{{ mix('/js/manifest.js') }}" defer></script>
+    <script src="{{ mix('/js/vendor.js') }}" defer></script> --}}
     <title>ERP</title>
     <style>
         body {
@@ -17,5 +19,6 @@
 </head>
 <body>
     @inertia
+
 </body>
 </html>

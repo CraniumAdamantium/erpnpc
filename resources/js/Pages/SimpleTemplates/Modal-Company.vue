@@ -3,7 +3,7 @@
         We make a button to display the modal, we can pass certain props to this button like class and value
         There's no way of making v-tooltip.side work with a dynamic call, so we just define it, update this when primevue module is ok
     -->
-    <button 
+    <button
         v-tooltip.bottom="{
             value: tooltipText,
             class: 'text-center',
@@ -265,9 +265,6 @@
 
 <script>
 import axios from "axios";
-import "primevue/resources/themes/vela-blue/theme.css";
-import "primevue/resources/primevue.css";
-import "primeicons/primeicons.css";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import Tooltip from "primevue/tooltip";
 

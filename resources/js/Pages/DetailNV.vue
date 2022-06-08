@@ -1,19 +1,33 @@
 <template>
     <!-- Here a sidebar if needed -->
-
-    <div class="px-2 mt-5">
-        <div class="w-11/12 ml-auto mr-auto mt-2 transform">
+    <div class="px-4 mt-5">
+        <div class="w-12/12 ml-auto mr-auto mt-2 transform">
             <div class="flex">
-                <h4 class="text-2xl text-white">Creando Nota de Venta</h4>
+                <h4 class="text-2xl text-white">
+                    {{
+                        Object.keys(details).length > 0 ? "Viendo " : "Creando "
+                    }}
+                    nota de venta Nº
+                    {{
+                        Object.keys(details).length > 0
+                            ? details.number
+                            : values.number
+                    }}
+                    {{
+                        Object.keys(details).length > 0
+                            ? " | " + details.deleted_at
+                            : null
+                    }}
+                </h4>
                 <div class="flex ml-auto items-center">
                     <button
-                        class="bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg text-sm px-3 py-3 text-center mr-2"
+                        class="bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg text-sm p-2 text-center mr-2"
                         @click="goback()"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
+                            width="24"
+                            height="24"
                             fill="white"
                             viewBox="0 0 16 16"
                         >
@@ -24,9 +38,12 @@
                     </button>
                     <button
                         class="bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm p-2 text-center mr-2"
+                        @click="save()"
+                        :disabled="Object.keys(details).length > 0"
                     >
                         <svg
-                            class="w-6 h-6"
+                            width="24"
+                            height="24"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -41,11 +58,13 @@
                         </svg>
                     </button>
                     <button
+                        v-if="Object.keys(details).length > 0"
                         class="disabled:bg-indigo-800 bg-indigo-700 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm px-2 py-2 text-center mr-2"
                         id="showReport"
                     >
                         <svg
-                            class="w-6 h-6"
+                            width="24"
+                            height="24"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -60,11 +79,17 @@
                         </svg>
                     </button>
                     <button
+                        v-if="
+                            Object.keys(details).length > 0 &&
+                            details.deleted_at == 'Activo'
+                        "
                         id="trash_receipt"
                         class="text-white disabled:bg-red-800 bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm px-2 py-2 text-center"
+                        @click="emitDelete()"
                     >
                         <svg
-                            class="w-6 h-6"
+                            width="24"
+                            height="24"
                             fill="none"
                             stroke="white"
                             viewBox="0 0 24 24"
@@ -82,32 +107,171 @@
             </div>
         </div>
     </div>
-    <div class="w-11/12 ml-auto mr-auto px-2">
-        <div class="grid grid-cols-1 sm:grid-cols-5 text-white">
-            <div class="col-span-1 mt-3">
-                <h4 class="text-base font-semibold">Numero</h4>
-                <input
-                    disabled
-                    class="disabled text-base font-medium border rounded w-6/12 h-9 py-3 px-3 text-white"
+    <div class="flex flex-col">
+        <div class="w-11/12 mx-auto flex flex-row m-4">
+            <div class="flex flex-col mt-2 mr-2">
+                <p class="text-base text-white">Fecha</p>
+                <Calendar
+                    :disabled="Object.keys(details).length > 0"
+                    :inputStyle="'background: white; color: black;'"
+                    v-model="values.date"
+                    dateFormat="dd/mm/yy"
                 />
             </div>
-            <div class="col-span-1 mt-3">
-                <h4 class="text-base font-semibold">Fecha</h4>
-            </div>
-            <div class="col-span-2 mt-3">
-                <h4 class="text-base font-semibold">Glosa</h4>
+            <div class="flex flex-col m-2">
+                <p class="text-base text-white">Descripción</p>
                 <input
-                    class="text-base font-medium border rounded w-9/12 h-9 py-3 px-3 text-black"
-                    placeholder="Ingresa una glosa"
-                    maxlength="200"
+                    :disabled="Object.keys(details).length > 0"
+                    class="p-2 text-black rounded-sm disabled:bg-gray-500 disabled:text-white"
+                    v-model="values.description"
                 />
             </div>
+            <div class="flex flex-col ml-auto mt-2">
+                <p class="text-base text-white">Total</p>
+                <p class="mt-1 text-xl text-white text-center self-center">
+                    {{ values.total }}
+                </p>
+            </div>
+        </div>
+        <div class="w-11/12 mx-auto">
+            <DataTable :value="values.table">
+                <template #empty> No hay artículos, añade uno! </template>
+                <template #header v-if="Object.keys(details).length == 0">
+                    <div
+                        class="flex flex-row justify-between gap-2 items-center"
+                    >
+                        <div class="self-end w-full">
+                            <p class="text-center">Artículo</p>
+                            <Dropdown
+                                class="w-full text-center text-lg text-white"
+                                placeholder="Selecciona un artículo"
+                                :options="articles_c"
+                                optionLabel="label"
+                                v-model="valuesToPush.article"
+                                :filter="true"
+                            />
+                        </div>
+                        <div class="self-end w-full">
+                            <p class="text-center">Cantidad</p>
+                            <InputText
+                                class="w-full text-center text-lg text-white"
+                                v-model="valuesToPush.quantity"
+                                placeholder="Ingresa la cantidad"
+                                type="number"
+                                @change="nozero()"
+                            />
+                        </div>
+
+                        <div class="self-end w-full">
+                            <p class="text-center">Precio</p>
+                            <InputText
+                                class="w-full text-center text-lg text-white"
+                                v-model="valuesToPush.sale_price"
+                                placeholder="Ingresa el precio"
+                                type="number"
+                                @change="nozero()"
+                            />
+                        </div>
+                        <div class="self-end mb-1">
+                            <button
+                                class="bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm p-2 text-center"
+                                @click="addRow()"
+                            >
+                                <svg
+                                    class="w-6 h-6"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+                <Column
+                    field="article_name"
+                    header="Articulo"
+                    :sortable="true"
+                ></Column>
+                <!-- Fecha de entrada es la fecha de la nota de compra -->
+
+                <Column
+                    field="quantity"
+                    header="Cantidad"
+                    :sortable="true"
+                ></Column>
+                <Column
+                    field="id_note_lot"
+                    header="Lote Nº"
+                    :sortable="true"
+                ></Column>
+                <Column
+                    field="sale_price"
+                    header="Precio"
+                    :sortable="true"
+                ></Column>
+                <Column
+                    header="Eliminar"
+                    field="number"
+                    v-if="Object.keys(details).length == 0"
+                >
+                    <template #body="slotProps">
+                        <button
+                            @click="delete_that(slotProps.data.id_article)"
+                            class="bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg text-sm px-4 py-2 text-center"
+                        >
+                            X
+                        </button>
+                    </template>
+                </Column>
+                <Column
+                    header="Estado"
+                    field="deleted_at"
+                    v-if="Object.keys(details).length > 0"
+                >
+                    <template #body="slotProps">
+                        <span
+                            :class="
+                                slotProps.data.deleted_at == null
+                                    ? 'bg-green-500 px-2 py-1 rounded-lg text-white'
+                                    : 'bg-red-500 px-2 py-1 rounded-lg text-white'
+                            "
+                        >
+                            {{
+                                slotProps.data.deleted_at == null
+                                    ? "Activo"
+                                    : "Anulado en " + slotProps.data.deleted_at
+                            }}
+                        </span>
+                    </template>
+                </Column>
+            </DataTable>
         </div>
     </div>
 </template>
+
 <script>
 import { Inertia } from "@inertiajs/inertia";
+import Dropdown from "primevue/dropdown";
+
+import InputText from "primevue/inputtext";
+import { reactive } from "@vue/reactivity";
+import { computed, watch, ref, onMounted } from "@vue/runtime-core";
+import Calendar from "primevue/calendar";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import { Notify } from "notiflix";
+
 export default {
+    components: { InputText, Calendar, DataTable, Column, Dropdown },
     props: {
         company: {
             type: Object,
@@ -118,25 +282,262 @@ export default {
             type: Object,
             required: true,
         },
+        details: {
+            type: Object,
+            default: {},
+        },
     },
-    emits: ["goback"],
+    emits: ["goback", "delete"],
     setup(props, { emit }) {
         const goback = () => {
             emit("goback");
         };
-        return { goback };
+        const articles_c = computed({
+            /* A diferencia del articulos para ventas, acá solo tengo que traer los articulos con lote mayor a 0*/
+            /* Solo puedo traer uno, pero la cosa es que  me guio por id_note_lot */
+            get() {
+                if (Object.keys(props.details).length > 0) return; //Esto es para no hacerlo si está en vista
+                /* Primero filtro por tipo de nota */
+                let artic = [];
+                props.company.notes
+                    .filter((note) => {
+                        return note.type == "1" && note.deleted_at == null;
+                    })
+                    .forEach((note) => {
+                        note.notes_lot.forEach((lot) => {
+                            console.log(lot, "Lote?");
+                            if (lot.pivot.quantity > 0) {
+                                artic.push(lot);
+                            }
+                        });
+                    });
+                console.log(artic);
+                return artic
+                    .map((art) => {
+                        return {
+                            label:
+                                art.name +
+                                " - Lote " +
+                                art.pivot.id_note_lot +
+                                " / [" +
+                                art.pivot.quantity +
+                                "]",
+                            value: art.pivot.id_note_lot,
+                            id_article: art.id_article,
+                            quantity: art.pivot.quantity,
+                            name: art.name,
+                        };
+                    })
+                    .filter((art) => {
+                        console.log(art, "pruebita");
+                        //Filter if it's in table
+                        return !values.table.some((fila) => {
+                            return fila.id_article == art.id_article;
+                        });
+                    });
+            },
+        });
+
+        const values = reactive({
+            number: computed(() => {
+                return props.company.notes.length == 0
+                    ? 1
+                    : Math.max(
+                          ...props.company.notes
+                              .filter((note) => {
+                                  return note.type == 2;
+                              })
+                              .map((note) => {
+                                  return note.number;
+                              })
+                      ) + 1;
+            }),
+            date: "",
+            description: "",
+            total: computed(() => {
+                return values.table
+                    .map((item) => {
+                        return item.sale_price * item.quantity;
+                    })
+                    .reduce((prev, next) => {
+                        return parseFloat(prev) + parseFloat(next);
+                    }, 0);
+            }),
+            id_receipt: "",
+            table: [],
+        });
+
+        const valuesToPush = reactive({
+            article: {}, //ok
+            expiration_date: "", //ok
+            quantity: 1, //ok
+            sale_price: 1,
+        });
+        const validate = () => {
+            let go = true;
+            if (valuesToPush.quantity == "" || valuesToPush.quantity <= 0) {
+                Notify.failure("Ingresa una cantidad mayor a 0");
+                go = false;
+            }
+            if (valuesToPush.sale_price == "" || valuesToPush.sale_price <= 0) {
+                Notify.failure("Ingresa un precio");
+                go = false;
+            }
+
+            if (Object.keys(valuesToPush.article).length == 0) {
+                Notify.failure("Ingresa un artículo");
+                go = false;
+            }
+            if (valuesToPush.stock == "" || valuesToPush.stock <= 0) {
+                Notify.failure("Ingresa un stock mayor a 0");
+                go = false;
+            }
+            return go;
+        };
+        const addRow = () => {
+            if (nozero()) return;
+            if (!validate()) return;
+            values.table.push({
+                ...valuesToPush,
+                id_article: valuesToPush.article.id_article,
+                article_name: valuesToPush.article.name,
+                id_note_lot: valuesToPush.article.value,
+            });
+
+            blank();
+        };
+        const blank = () => {
+            valuesToPush.article = {};
+            valuesToPush.quantity = 1;
+            valuesToPush.sale_price = 1;
+        };
+        const nozero = () => {
+            let response = false;
+            valuesToPush.quantity = parseInt(valuesToPush.quantity);
+            valuesToPush.stock = parseInt(valuesToPush.stock);
+            if (valuesToPush.quantity == "" || valuesToPush.quantity <= 0) {
+                valuesToPush.quantity = 1;
+                Notify.warning(
+                    "La cantidad no puede ser 0 o menos, estableciendo 1"
+                );
+                response = true;
+            }
+            if (valuesToPush.sale_price == "" || valuesToPush.sale_price <= 0) {
+                Notify.warning(
+                    "El precio de venta no puede ser 0 o negativo, estableciendo 1"
+                );
+                valuesToPush.sale_price = 1;
+                response = true;
+            }
+            //Now validate that the article max stock is not exceeded
+            console.log(valuesToPush.article);
+            if (valuesToPush.quantity > valuesToPush.article.quantity) {
+                Notify.failure(
+                    "La cantidad no puede ser mayor al stock del artículo"
+                );
+                response = true;
+            }
+            return response;
+        };
+        const delete_that = (num) => {
+            //Find index of id_article
+            let index = values.table.findIndex((item) => {
+                return item.id_article == num;
+            });
+            values.table.splice(index, 1);
+        };
+        const save = () => {
+            let goonogo = true;
+            //Aditional validation
+            if (values.table.length == 0) {
+                Notify.failure("Ingresa al menos un artículo");
+                goonogo = false;
+            }
+            if (values.date == "") {
+                Notify.failure("Ingresa una fecha");
+                goonogo = false;
+            }
+            if (values.description == "" || values.description.length < 3) {
+                Notify.failure(
+                    "Ingresa una descripción de al menos 3 carácteres"
+                );
+                goonogo = false;
+            }
+            if (!goonogo) return;
+
+            //Now change table to array of objects where the key is the id_article
+            let table = {};
+            values.table.forEach((item) => {
+                table[item.id_article] = {
+                    quantity: item.quantity,
+                    id_note_lot: item.id_note_lot, //to count the article
+                    sale_price: item.sale_price,
+                };
+            });
+            //define object to send
+            let data = {
+                id_company: props.company.id_company,
+                date: values.date,
+                description: values.description,
+                table: table,
+                total: values.total,
+            };
+            console.log("Data enviada", data);
+
+            Inertia.post(route("notes.api.create_v"), data, {
+                onSuccess: () => {
+                    Notify.success("Nota de venta creada");
+                    emit("goback");
+                },
+                onError: (errors) => {
+                    for (let error in errors) {
+                        Notify.failure(errors[error]);
+                    }
+                },
+            });
+        };
+        onMounted(() => {
+            console.log("Montado", values.table);
+            if (Object.keys(props.details).length > 0) {
+                //If details is set, then just show it and disable everything
+                props.details.details.forEach((detalle) => {
+                    values.table.push({
+                        article_name: detalle.name,
+                        quantity: detalle.pivot.quantity,
+                        id_note_lot: detalle.pivot.id_note_lot,
+                        sale_price: detalle.pivot.sale_price,
+                        deleted_at: detalle.pivot.deleted_at,
+                    });
+                });
+                values.description = props.details.description;
+                values.date = props.details.date;
+            }
+        });
+
+        const emitDelete = () => {
+            emit("delete");
+            emit("goback");
+        };
+        return {
+            emitDelete,
+
+            save,
+            delete_that,
+            nozero,
+            goback,
+            values,
+            valuesToPush,
+
+            articles_c,
+            addRow,
+        };
     },
 };
 </script>
-
 <style>
-@media (min-width: 640px) {
-    #h4Basura {
-        margin-left: 21%;
-    }
-    #inputBasura {
-        width: 78%;
-        float: right;
-    }
+.p-inputtext:disabled {
+    background-color: rgb(107 114 128) !important;
+    opacity: 1 !important;
+    color: white !important;
 }
 </style>

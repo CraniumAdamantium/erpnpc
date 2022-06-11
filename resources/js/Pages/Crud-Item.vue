@@ -136,6 +136,7 @@
             <Column header="Cantidad" :sortable="true" field="quantity">
             </Column>
             <Column
+                class="preciotrucho"
                 header="Precio"
                 field="sale_price"
                 :sortable="true"
@@ -222,13 +223,43 @@
         </form>
     </Dialog>
     <Dialog
-        :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+        :breakpoints="{ '1960px': '75vw', '640px': '100vw' }"
         :style="{ width: '50vw' }"
         :modal="true"
         :header="'Artículo: ' + data.selected_item.name"
         v-model:visible="data.showLotes"
-        :closeOnEscape="false"
+        :closeOnEscape="true"
     >
+        <DataTable
+            columnResizeMode="fit"
+            :value="lotes"
+            class="p-datatable-sm"
+            :paginator="true"
+            selectionMode="single"
+            :scrollable="true"
+            :rows="7"
+            v-model:filters="filters"
+        >
+            <template #empty> No hay artículos, registra uno ! </template>
+            <Column header="Nro. Lote" :sortable="true" field="lote_number">
+            </Column>
+            <Column
+                header="Fecha de Ingreso"
+                :sortable="true"
+                field="entry_date"
+            >
+            </Column>
+            <Column
+                header="Fecha de Vencimiento"
+                :sortable="true"
+                field="expiration_date"
+            >
+            </Column>
+            <Column header="Cantidad" field="quantity" :sortable="true">
+            </Column>
+            <Column header="Stock" :sortable="false" field="stock"> </Column>
+            <Column header="Estado" :sortable="false" field="status"> </Column>
+        </DataTable>
     </Dialog>
 </template>
 <script>
@@ -296,6 +327,36 @@ export default {
                         }),
                     };
                 });
+            },
+        });
+        const lotes = computed({
+            get() {
+                let arraytrucho = [];
+                props.items
+                    .filter((item) => item.id_article == data.selected_item.id)
+                    .forEach((item) => {
+                        console.log("item", item);
+                        item.notes_lot.forEach((lote) => {
+                            arraytrucho.push({
+                                lote_number: lote.pivot.id_note_lot,
+                                stock: lote.pivot.quantity,
+                                entry_date: lote.pivot.entry_date,
+                                expiration_date: lote.pivot.expiration_date
+                                    ? lote.pivot.expiration_date
+                                    : " - ",
+                                quantity: parseInt(lote.pivot.stock),
+                                status:
+                                    lote.pivot.deleted_at != null
+                                        ? "Anulado desde " +
+                                          lote.pivot.deleted_at
+                                        : lote.pivot.quantity > 0
+                                        ? "Activo"
+                                        : "Agotado",
+                            });
+                        });
+                    });
+                console.log(arraytrucho);
+                return arraytrucho;
             },
         });
         const categories_c = computed({
@@ -461,6 +522,7 @@ export default {
             blank,
             setEdit,
             items_c,
+            lotes,
             submit,
             categories_c,
             values,
@@ -470,3 +532,14 @@ export default {
     },
 };
 </script>
+<style>
+.preciotrucho > .p-column-header-content {
+    display: inline-flex;
+    align-items: right;
+    margin-left: auto;
+}
+td.preciotrucho {
+    text-align: right !important;
+    display: inline !important;
+}
+</style>

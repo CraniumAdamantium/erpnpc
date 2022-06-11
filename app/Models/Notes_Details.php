@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+
 
 class Notes_Details extends Pivot
 {

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->integer('quantity');
-            $table->decimal('sale_price', 10, 2);
+            $table->decimal('sale_price', 20, 2);
             $table->foreignId('id_company')->constrained('companies', 'id_company');
             $table->foreignId('id_user')->constrained('users', 'id_user');
         });

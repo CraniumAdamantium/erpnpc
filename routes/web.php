@@ -17,6 +17,7 @@ use App\Http\Controllers\Report;
 use App\Http\Controllers\Category;
 use App\Http\Controllers\Item;
 use App\Http\Controllers\Note;
+use App\Http\Controllers\Reportes;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -36,6 +37,9 @@ Route::get('/', [Credentials::class, 'login'])->name('login');
 Route::post('/', [Credentials::class, 'signin'])->name('signin');
 Route::get('/logout', [Credentials::class, 'signout'])->name('logout');
 Route::get('/pruebita', [Credentials::class, 'pruebita'])->name('pruebita')->middleware('isLoggedIn');
+
+//Jasper
+Route::get('/reporte/estado_resultados', [Reportes::class, 'estado_resultados'])->name('reporte_estado_resultados');
 
 
 Route::get('/hash/{hashThis}', function ($hashThis) {

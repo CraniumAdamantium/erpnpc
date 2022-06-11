@@ -134,7 +134,11 @@
             </div>
         </div>
         <div class="w-11/12 mx-auto">
-            <DataTable :value="values.table">
+            <DataTable
+                :value="values.table"
+                :editMode="Object.keys(details).length > 0 ? '' : 'cell'"
+                @cell-edit-complete="onCellEditComplete"
+            >
                 <template #empty> No hay artículos, añade uno! </template>
                 <template #header v-if="Object.keys(details).length == 0">
                     <div
@@ -203,20 +207,22 @@
                 ></Column>
                 <!-- Fecha de entrada es la fecha de la nota de compra -->
 
-                <Column
-                    field="quantity"
-                    header="Cantidad"
-                    :sortable="true"
+                <Column field="quantity" header="Cantidad" :sortable="true"
+                    ><template #editor="slotProps">
+                        <InputText
+                            v-model="slotProps.data[slotProps.field]"
+                        /> </template
                 ></Column>
                 <Column
                     field="id_note_lot"
                     header="Lote Nº"
                     :sortable="true"
                 ></Column>
-                <Column
-                    field="sale_price"
-                    header="Precio"
-                    :sortable="true"
+                <Column field="sale_price" header="Precio" :sortable="true">
+                    <template #editor="slotProps">
+                        <InputText
+                            v-model="slotProps.data[slotProps.field]"
+                        /> </template
                 ></Column>
                 <Column
                     header="Eliminar"
@@ -518,7 +524,33 @@ export default {
             emit("delete");
             emit("goback");
         };
+        const onCellEditComplete = (e) => {
+            if (e.field == "quantity") {
+                console.log(e);
+                if (e.newValue == "" || e.newValue <= 0) {
+                    Notify.failure("Ingresa una cantidad mayor a 0");
+                    return;
+                }
+                if (e.newValue > e.data.article.quantity) {
+                    Notify.failure(
+                        "La cantidad no puede ser mayor al stock del artículo. Stock: " +
+                            e.data.article.quantity
+                    );
+                    return;
+                }
+
+                values.table[e.index].quantity = e.newValue;
+            }
+            if (e.field == "sale_price") {
+                if (e.newValue == "" || e.newValue <= 0) {
+                    Notify.failure("Ingresa un precio mayor a 0");
+                    return;
+                }
+                values.table[e.index].sale_price = e.newValue;
+            }
+        };
         return {
+            onCellEditComplete,
             emitDelete,
 
             save,

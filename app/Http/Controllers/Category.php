@@ -17,7 +17,7 @@ class Category extends Controller
     public function view($company)
     {
         $exists = Company::where('name', urldecode($company))->where('id_user', Auth::user()->id_user)->where('status', 1)->first();
-        $exists->load('categories');
+        $exists->load('categories.articles.notes_lot');
         if ($exists) {
             return Inertia::render('Crud-Category', [
                 'company' => $exists,

@@ -1,5 +1,4 @@
 const mix = require("laravel-mix");
-require("laravel-mix-purgecss");
 
 /*
  |--------------------------------------------------------------------------
@@ -22,8 +21,9 @@ mix.js("resources/js/app.js", "public/js")
 
 mix.js("resources/js/app.js", "public/js")
     .vue()
-    /* .extract(["vue"], "js/vue.js")
-    .extract(["primevue"], "js/primevue.js") */
+    /* .extract(["vselect", "axios"])
+    .extract(["primevue/datatable"]) */
+    .extract()
     .postCss("resources/css/app.css", "public/css")
     .options({
         postCss: [require("tailwindcss")],
@@ -39,5 +39,10 @@ mix.webpackConfig({
     output: {
         //filename: "[name].bundle.js",
         chunkFilename: "js/[name].js?id=[chunkhash]",
+    },
+    optimization: {
+        splitChunks: {
+            chunks: "all",
+        },
     },
 });

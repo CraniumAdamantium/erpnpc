@@ -113,6 +113,13 @@
             >
             </Column>
             <Column
+                field="status"
+                header="Estado"
+                :sortable="true"
+                filterMatchMode="contains"
+            >
+            </Column>
+            <Column
                 field="name"
                 header="Moneda"
                 :sortable="true"
@@ -206,13 +213,25 @@ export default {
                     return "";
             }
         },
+        returnStatus(id) {
+            switch (id) {
+                case 0:
+                    return "Cerrado";
+                case 1:
+                    return "Abierto";
+                case 2:
+                    return "Anulado";
+                default:
+                    return "";
+            }
+        },
         transformData() {
             this.receipts.forEach((date) => {
                 date.date = dayjs(date.date).format("DD/MM/YYYY");
-
                 date.receipt_type = this.getReceiptType(
                     parseInt(date.receipt_type)
                 );
+                this.status = this.returnStatus(parseInt(date.status));
             });
         },
         toggleMenu() {

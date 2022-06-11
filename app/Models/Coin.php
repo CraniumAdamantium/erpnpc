@@ -18,4 +18,7 @@ class Coin extends Model
         "abbreviation",
         "id_user"
     ];
+    public function receipts(){
+        return $this->hasMany(Receipt::class, 'id_coin', 'id_coin');
+    }
 }

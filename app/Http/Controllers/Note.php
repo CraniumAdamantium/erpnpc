@@ -10,12 +10,9 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
-
-
 use App\Models\Company;
 use App\Models\ManagementDate;
 use App\Models\Notes;
-use App\Models\Notes_Details;
 use App\Models\Notes_Lot;
 use App\Models\Receipt;
 use App\Models\ReceiptDetail;
@@ -274,6 +271,7 @@ class Note extends Controller
             foreach ($request->table as $key => $value) {
                 $newArray[$key] =  [
                     'entry_date' => Carbon::parse($value['entry_date']),
+                    'expiration_date' => Carbon::parse($value['expiration_date']),
                     'id_note_lot' => $value['id_note_lot'],
                     'purchase_price' => $value['purchase_price'],
                     'quantity' => $value['quantity'],
@@ -303,9 +301,13 @@ class Note extends Controller
         ]);
         $note = Notes::findOrFail($request->id_note)->load(['notes_lot']);
         /* Validar si tiene ventas */
-        $rel = DB::table('notes')->where('notes.id_note', $request->id_note)->leftJoin('notes_lot', 'notes_lot.id_note_lot', '=', 'notes_lot.id_note_lot')->leftJoin('notes_details', 'notes_details.id_note_lot', '=', 'notes_lot.id_note_lot')->count();
-        if ($rel > 0) {
-            return back()->withErrors(['error' => 'No se puede eliminar el comprobante, ya se genero una venta']);
+        $rel = DB::table('notes_lot')->where('notes_lot.id_note', $request->id_note)->get();
+        $count = 0;
+        foreach ($rel as $r) {
+            $count = $count + DB::table('notes_details')->where('id_note_lot', $r->id_note_lot)->count();
+        }
+        if ($count > 0) {
+            return back()->withErrors(['error' => 'No se puede eliminar el comprobante, tiene ventas asociadas']);
         }
         DB::beginTransaction();
         try {
@@ -346,6 +348,7 @@ class Note extends Controller
                 /* Suponiendo que lo devuelve como un modelo iterable con sus métodos y funciones... */
                 $value->increment('quantity', $value->pivot->quantity);
                 $lote = DB::table('notes_lot')->where('id_note_lot', $value->pivot->id_note_lot)->where('id_article', $value->id_article)->first();
+
                 DB::table('notes_lot')->where('id_note_lot', $value->pivot->id_note_lot)->where('id_article', $value->id_article)->update(['quantity' => $lote->quantity + $value->pivot->quantity]);
             }
             foreach ($note->notes_details as $key => $value) {

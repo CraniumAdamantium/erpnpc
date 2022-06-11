@@ -19,4 +19,9 @@ class Categories extends Model
         'id_user',
         'id_parent_category'
     ];
+    public function articles()
+    {
+
+        return $this->belongsToMany(Articles::class, Articles_Categories::class, 'id_category', 'id_article');
+    }
 }

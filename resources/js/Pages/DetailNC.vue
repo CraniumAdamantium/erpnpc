@@ -134,7 +134,11 @@
             </div>
         </div>
         <div class="w-11/12 mx-auto">
-            <DataTable :value="values.table">
+            <DataTable
+                :value="values.table"
+                :editMode="Object.keys(details).length > 0 ? '' : 'cell'"
+                @cell-edit-complete="onCellEditComplete"
+            >
                 <template #empty> No hay artículos, añade uno! </template>
                 <template #header v-if="Object.keys(details).length == 0">
                     <div
@@ -170,6 +174,7 @@
                         <div class="self-end w-full">
                             <p class="text-center">Fecha de expiración</p>
                             <Calendar
+                                dateFormat="dd/mm/yy"
                                 class="w-full text-center text-lg text-white"
                                 v-model="valuesToPush.expiration_date"
                                 placeholder="Ingresa la fecha de expiración"
@@ -212,28 +217,32 @@
                 </template>
                 <Column field="number" header="Número de lote" :sortable="true">
                 </Column>
-                <Column
-                    field="article_name"
-                    header="Articulo"
-                    :sortable="true"
-                ></Column>
+                <Column field="article_name" header="Articulo" :sortable="true">
+                </Column>
                 <!-- Fecha de entrada es la fecha de la nota de compra -->
 
                 <Column
                     field="expiration_date_c"
                     header="Fecha de expiración"
                     :sortable="true"
+                    ><template #editor="slotProps">
+                        <Calendar
+                            dateFormat="dd/mm/yy"
+                            v-model="slotProps.data[slotProps.field]"
+                        /> </template
                 ></Column>
-                <Column
-                    field="quantity"
-                    header="Cantidad"
-                    :sortable="true"
+                <Column field="quantity" header="Cantidad" :sortable="true">
+                    <template #editor="slotProps">
+                        <InputText
+                            v-model="slotProps.data[slotProps.field]"
+                        /> </template
                 ></Column>
                 <Column field="stock" header="Stock" :sortable="true"></Column>
-                <Column
-                    field="purchase_price"
-                    header="Precio"
-                    :sortable="true"
+                <Column field="purchase_price" header="Precio" :sortable="true"
+                    ><template #editor="slotProps">
+                        <InputText
+                            v-model="slotProps.data[slotProps.field]"
+                        /> </template
                 ></Column>
                 <Column
                     header="Eliminar"
@@ -466,6 +475,7 @@ export default {
             if (!goonogo) return;
 
             //Now change table to array of objects where the key is the id_article
+
             let table = {};
             values.table.forEach((item) => {
                 table[item.article.value] = {
@@ -526,7 +536,32 @@ export default {
             emit("delete");
             emit("goback");
         };
+        const onCellEditComplete = (e) => {
+            if (e.field == "quantity") {
+                if (e.newValue == "" || e.newValue <= 0) {
+                    Notify.failure("Ingresa una cantidad mayor a 0");
+                    return;
+                }
+                values.table[e.index].stock = e.newValue;
+                values.table[e.index].quantity = e.newValue;
+            }
+            if (e.field == "purchase_price") {
+                if (e.newValue == "" || e.newValue <= 0) {
+                    Notify.failure("Ingresa un precio");
+                    return;
+                }
+                values.table[e.index].purchase_price = e.newValue;
+            }
+            if (e.field == "expiration_date_c") {
+                values.table[e.index].expiration_date = e.newValue;
+                values.table[e.index].expiration_date_c =
+                    makeDate(e.newValue) == ""
+                        ? "Sin expiración"
+                        : makeDate(e.newValue);
+            }
+        };
         return {
+            onCellEditComplete,
             emitDelete,
             actualLoteNumber,
             save,

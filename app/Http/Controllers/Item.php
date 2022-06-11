@@ -26,7 +26,9 @@ class Item extends Controller
                 [
                     'company' => $exists,
                     'userData' => fn () => Auth::user(),
-                    'items' => fn () => Articles::where('id_company', $exists->id_company)->with('categories')->get(),
+                    'items' => fn () => Articles::where('id_company', $exists->id_company)->with(['categories', 'notes_lot' => function ($query) {
+                        $query->withTrashed();
+                    }])->get(),
                     'categories' => fn () => Categories::where('id_company', $exists->id_company)->get(),
 
                 ]
@@ -81,6 +83,11 @@ class Item extends Controller
         $request->validate([
             'id_article' => 'required|exists:articles,id_article',
         ]);
+        $contador = DB::table('notes_lot')->where('id_article', $request->id_article)->count();
+        $contador2 = DB::table('notes_details')->where('id_article', $request->id_article)->count();
+        if ($contador + $contador2 > 0) {
+            return back()->withErrors(['message' => 'No se puede eliminar el articulo porque tiene notas asociadas']);
+        }
         Articles::find($request->id_article)->delete();
         return back()->with('success', ['message' => 'Item eliminado correctamente']);
     }

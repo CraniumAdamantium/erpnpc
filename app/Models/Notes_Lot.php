@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use DateTimeInterface;
+
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -15,10 +15,11 @@ class Notes_Lot extends Pivot
     protected $table = 'notes_lot';
     protected $fillable = ['id_note_lot', 'id_note', 'id_article', 'entry_date', 'expiration_date', 'quantity', 'purchase_price', 'stock'];
     public $timestamps = false;
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->timezone('America/La_Paz')->format('d/m/Y H:i');
-    }
+    protected $casts = [
+        'entry_date' => 'datetime:d/m/Y',
+        'expiration_date' => 'datetime:d/m/Y',
+        'deleted_at' => 'datetime:d/m/Y',
+    ];
 
     public function notes()
     {

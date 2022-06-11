@@ -7651,6 +7651,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 14rem;
 }
 
+.w-72 {
+  width: 18rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -8265,14 +8269,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.text-black {
-  --tw-text-opacity: 1;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
-}
-
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 .text-gray-800 {
@@ -8725,13 +8729,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   }
   .sm\:justify-end {
     justify-content: flex-end;
-  }
-  .sm\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-  .sm\:leading-5 {
-    line-height: 1.25rem;
   }
 }
 

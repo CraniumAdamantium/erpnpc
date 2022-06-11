@@ -22,4 +22,9 @@ class ReceiptDetail extends Model
         'id_receipt',
         'id_account'
     ];
+    //Account relationship
+    public function account()
+    {
+        return $this->belongsTo(Account::class, 'id_account', 'id_account');
+    }
 }

@@ -1,8 +1,19 @@
 <template>
-    <Navbar :userName="userName" :companyName="companyName" />
+    <Navbar :userName="user.name" :companyName="company.name" />
+
     <div class="w-11/12 ml-auto mr-auto mt-2">
+        <p class="text-2xl text-white mb-2">Administracion de categorias</p>
         <div class="flex">
-            <p class="text-2xl text-white mb-2">Administracion de categorias</p>
+            <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                    placeholder="Filtrar por cantidad menor a..."
+                    class="w-72"
+                    type="number"
+                    v-model="data.filter_quantity"
+                    @keyup="recreate()"
+                />
+            </span>
             <div class="flex ml-auto items-center">
                 <button
                     class="px-2 py-2 m-1 bg-green-500 text-white rounded-lg"
@@ -94,8 +105,8 @@
             @node-unselect="onNodeUnselect"
             :filter="true"
             filterMode="lenient"
+            filterPlaceholder="Filtrar por nombre"
         >
-            <template #header> Editar Categorias </template>
         </Tree>
     </div>
     <h1 class="text-white text-center mt-2">
@@ -126,13 +137,15 @@
                         Nombre
                     </label>
                     <div class="mt-1 rounded-md shadow-sm">
-                        <input
+                        <InputText
                             v-focus
                             id="nombre"
                             autocomplete="off"
                             name="nombre"
-                            class="text-black form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                             v-model="data.name"
+                            class="w-full"
+                            minlength="3"
+                            placeholder="Nombre de la categoria"
                         />
                     </div>
                 </div>
@@ -144,12 +157,14 @@
                         Descripción
                     </label>
                     <div class="mt-1 rounded-md shadow-sm">
-                        <input
+                        <InputText
                             id="descripcion"
                             autocomplete="off"
                             name="descripcion"
-                            class="text-black form-input block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                             v-model="data.description"
+                            class="w-full"
+                            minlength="3"
+                            placeholder="Una descripción"
                         />
                     </div>
                 </div>
@@ -182,6 +197,7 @@ import Tree from "primevue/tree";
 import Dialog from "primevue/dialog";
 import Navbar from "./SimpleTemplates/Navbar";
 import { computed, onMounted, reactive } from "@vue/runtime-core";
+import InputText from "primevue/inputtext";
 import { Inertia } from "@inertiajs/inertia";
 import { Notify, Loading } from "notiflix";
 const focus = {
@@ -191,15 +207,18 @@ export default {
     directives: {
         focus,
     },
-    components: { Tree, Navbar, Dialog },
-    props: ["company", "user"],
+    components: { Tree, Navbar, Dialog, InputText },
+    props: {
+        company: {
+            type: Object,
+            required: true,
+        },
+        user: {
+            type: Object,
+            required: true,
+        },
+    },
     setup(props) {
-        const userName = computed(() => {
-            return props.user.name;
-        });
-        const companyName = computed(() => {
-            return props.company.name;
-        });
         const data = reactive({
             showModal: false,
             accion: "Agregar",
@@ -209,7 +228,11 @@ export default {
             name: "",
             description: "",
             categoria_seleccionada: {},
+            filter_quantity: "",
         });
+
+        /* Iterar sobre todos los valores del arbol "categorias_tratadas" y determinar si el label es menor a */
+
         const onNodeUnselect = (e) => {
             data.categoria_seleccionada_keys = {};
         };
@@ -233,12 +256,40 @@ export default {
         };
         const crearArbol = () => {
             let arrayToTree = (array) => {
-                array.forEach((node) => {
+                array.forEach((node, index) => {
                     node.key = node.id_category;
+                    /* Esta basura silva, si me preguntas, con esto lo hago */
+                    let quantity = 0;
+                    node.articles?.forEach((article) => {
+                        article.notes_lot.forEach((notes_lot) => {
+                            if (notes_lot.deleted_at == null) {
+                                quantity += notes_lot.pivot.quantity;
+                            }
+                        });
+                    });
+
                     node.label = node.name;
+
+                    node.label = node.name + " - [" + quantity + "]";
+
+                    if (
+                        quantity > data.filter_quantity &&
+                        data.filter_quantity != ""
+                    ) {
+                        node.filter = true;
+                        /* Trim from array */
+                    } else {
+                        node.filter = false;
+                    }
+                    /* ============== */
                 });
+
+                const earray = array.filter((val) => {
+                    return !val.filter;
+                });
+
                 let findParentIndex = (id_parent) => {
-                    return array.findIndex(
+                    return earray.findIndex(
                         (node) => node.id_category == id_parent
                     );
                 };
@@ -249,54 +300,62 @@ export default {
                     });
                 };
                 let hasChildren = (id) => {
-                    return array.find((node) => node.id_parent_category == id);
+                    return earray.find((node) => node.id_parent_category == id);
                 };
-                let check = allParentsNull(array);
+                let check = allParentsNull(earray);
                 let count = 0;
+                /* Ignore here for filter */
+
                 while (check) {
-                    for (let i = 0; i < array.length; i++) {
-                        if (array[i].id_parent_category != null) {
+                    for (let i = 0; i < earray.length; i++) {
+                        if (earray[i].id_parent_category != null) {
                             if (
-                                hasChildren(array[i].id_category) == undefined
+                                hasChildren(earray[i].id_category) == undefined
                             ) {
                                 let indexParent = findParentIndex(
-                                    array[i].id_parent_category
+                                    earray[i].id_parent_category
                                 );
+
                                 if (indexParent != -1) {
-                                    let padre = array[indexParent];
+                                    let padre = earray[indexParent];
 
                                     if (!padre.children) {
                                         padre.children = [];
                                     }
 
-                                    padre.children.push(array[i]);
+                                    padre.children.push(earray[i]);
                                 }
 
-                                array.splice(i, 1);
+                                earray.splice(i, 1);
                             }
                         }
                     }
 
-                    check = allParentsNull(array);
+                    check = allParentsNull(earray);
 
                     count++;
                     if (count > 100) {
                         break;
                     }
                 }
-                console.log("Terminado en ", count, " iteraciones");
+                console.log("Terminado en ", count, " iteraciones", earray);
                 let tree = [
                     {
                         label: "Categorias",
-                        children: array,
+                        children: earray,
                     },
                 ];
                 return tree;
             };
             //Assign porque proxy prop no es editable
 
-            return arrayToTree(Object.assign(props.company.categories));
+            return arrayToTree([...props.company.categories]);
             //Expand all
+        };
+        /* Puede que hacer esto lagee si las categorías son miles, aunque lo dudo */
+        const recreate = () => {
+            console.log("El arbol", crearArbol());
+            data.categorias_tratadas = crearArbol();
         };
         onMounted(() => {
             data.categorias_tratadas = crearArbol();
@@ -380,6 +439,7 @@ export default {
                         Loading.remove();
                         Notify.success("Categoria eliminada");
                         data.showModal = false;
+                        data.selectedCategory = {};
                         data.categorias_tratadas = crearArbol();
                     },
                     onError: () => {
@@ -389,14 +449,14 @@ export default {
                 }
             );
         };
+
         return {
+            recreate,
             onNodeUnselect,
             onNodeSelect,
             data,
             submit,
             deleteCat,
-            userName,
-            companyName,
         };
     },
 };

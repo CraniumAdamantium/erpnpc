@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('id_article')->constrained('articles', 'id_article');
             $table->integer('id_note_lot'); //Number based in article number of lot, always start at 0
             $table->integer('quantity');
-            $table->decimal('sale_price', 10, 2);
+            $table->decimal('sale_price', 20, 2);
             $table->softDeletes();
             //Unique id_note, id_article and id_note_detail
             $table->unique(['id_note', 'id_article', 'id_note_lot']);

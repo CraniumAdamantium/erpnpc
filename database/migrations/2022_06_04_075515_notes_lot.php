@@ -24,7 +24,7 @@ return new class extends Migration
             $table->dateTime('entry_date');
             $table->dateTime('expiration_date')->nullable();
             $table->integer('quantity');
-            $table->decimal('purchase_price', 10, 2);
+            $table->decimal('purchase_price', 20, 2);
 
             // 0 = out of stock
             $table->decimal('stock', 10, 2);

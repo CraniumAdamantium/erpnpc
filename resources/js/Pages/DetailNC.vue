@@ -1,7 +1,7 @@
 <template>
     <!-- Here a sidebar if needed -->
-    <div class="px-4 mt-5">
-        <div class="w-12/12 ml-auto mr-auto mt-2 transform">
+    <div class="mt-5">
+        <div class="w-11/12 mx-auto mt-2 transform">
             <div class="flex">
                 <h4 class="text-2xl text-white">
                     {{
@@ -37,9 +37,9 @@
                         </svg>
                     </button>
                     <button
+                        v-if="Object.keys(details).length == 0"
                         class="bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm p-2 text-center mr-2"
                         @click="save()"
-                        :disabled="Object.keys(details).length > 0"
                     >
                         <svg
                             width="24"
@@ -61,6 +61,7 @@
                         v-if="Object.keys(details).length > 0"
                         class="disabled:bg-indigo-800 bg-indigo-700 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm px-2 py-2 text-center mr-2"
                         id="showReport"
+                        @click="goReport()"
                     >
                         <svg
                             width="24"
@@ -574,6 +575,13 @@ export default {
             articles_c,
             addRow,
         };
+    },
+    methods: {
+        goReport() {
+            window.open(
+                `http://reportes.queeserp.tk/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Fthemes%2FReportes&reportUnit=%2Fthemes%2FReportes%2FReporteNotaCompra&standAlone=true&note_number=${this.details.number}&id_company=${this.company.id_company}&id_user=1&j_username=jasperadmin&j_password=bitnami&sessionDecorator=no`
+            );
+        },
     },
 };
 </script>

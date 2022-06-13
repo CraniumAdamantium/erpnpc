@@ -271,7 +271,7 @@ class Note extends Controller
             foreach ($request->table as $key => $value) {
                 $newArray[$key] =  [
                     'entry_date' => Carbon::parse($value['entry_date']),
-                    'expiration_date' => Carbon::parse($value['expiration_date']),
+                    'expiration_date' => $value['expiration_date'] == null ? $value['expiration_date'] : Carbon::parse($value['expiration_date']),
                     'id_note_lot' => $value['id_note_lot'],
                     'purchase_price' => $value['purchase_price'],
                     'quantity' => $value['quantity'],
@@ -301,14 +301,13 @@ class Note extends Controller
         ]);
         $note = Notes::findOrFail($request->id_note)->load(['notes_lot']);
         /* Validar si tiene ventas */
-        $rel = DB::table('notes_lot')->where('notes_lot.id_note', $request->id_note)->get();
-        $count = 0;
-        foreach ($rel as $r) {
-            $count = $count + DB::table('notes_details')->where('id_note_lot', $r->id_note_lot)->count();
+        foreach ($note->notes_lot as $rel) {
+            $rel = DB::table('notes_details')->where('notes_details.id_note_lot', $rel->pivot->id_note_lot)->where('notes_details.id_article', $rel->pivot->id_article)->count();
+            if ($rel > 0) {
+                return back()->withErrors(['error' => 'No se puede eliminar el comprobante, tiene ventas asociadas']);
+            }
         }
-        if ($count > 0) {
-            return back()->withErrors(['error' => 'No se puede eliminar el comprobante, tiene ventas asociadas']);
-        }
+
         DB::beginTransaction();
         try {
 

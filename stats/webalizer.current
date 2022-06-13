@@ -1,7 +1,7 @@
-# Webalizer V2.23-08 Incremental Data - 06/11/2022 01:45:26
-2022 6 11 1 45 26
-33393 31021 38 203 91 26 1941409876 14447 133 0 0 0
-4 401 4234 1 11
+# Webalizer V2.23-08 Incremental Data - 06/13/2022 01:09:53
+2022 6 13 1 9 53
+33939 31516 42 203 91 30 1957405262 14697 146 0 0 0
+2 4 4234 1 13
 4 2 87357 2 4 2 0 0
 234 224 6176826 4 225 6 0 0
 1132 1104 58657204 9 976 18 0 0
@@ -12,7 +12,9 @@
 11015 10051 540719176 5 4979 27 0 0
 6617 6604 144452389 9 2094 10 0 0
 3661 3350 272213706 7 840 15 0 0
-423 387 12692708 4 189 3 0 0
+869 795 27640766 6 382 10 0 0
+7 4 79351 2 5 4 0 0
+93 83 967977 2 52 2 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -31,13 +33,11 @@
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-582 540 42667725 269 0 0
-1802 1650 126800235 908 0 0
-2940 2681 242717656 1067 0 0
-2382 2310 89107768 716 0 0
-670 628 46131614 241 0 0
+671 622 43608757 317 0 0
+1885 1724 129884865 939 0 0
+3066 2797 245790415 1132 0 0
+2581 2492 96840453 792 0 0
+706 660 46755576 266 0 0
 508 483 37390915 185 0 0
 1034 861 52693409 576 0 0
 1248 1154 63463983 775 0 0
@@ -46,21 +46,21 @@
 3904 3741 204971179 1312 0 0
 721 662 60659413 210 0 0
 202 196 5895781 62 0 0
-435 400 27923998 265 0 0
+437 401 27949753 266 0 0
 463 418 37609978 210 0 0
 367 329 28612509 166 0 0
 380 286 16499123 276 0 0
 450 373 40878711 282 0 0
 997 929 33041912 653 0 0
-766 729 39224687 558 0 0
-1421 1309 95169373 832 0 0
+768 730 39250442 559 0 0
+1430 1316 95658181 835 0 0
 1420 1245 120948232 741 0 0
 1477 1318 133280032 807 0 0
 519 496 19920686 395 0 0
 0
 0
 0
-31021
+31516
 0
 0
 0
@@ -69,7 +69,7 @@
 0
 0
 0
-563
+585
 0
 1
 0
@@ -78,7 +78,7 @@
 0
 0
 0
-1623
+1652
 1
 0
 0
@@ -102,29 +102,29 @@
 /api/receiptdetails/read/16
 0 2 0 4978 0 0 0 0
 /js/resources_js_Pages_DetailNV_vue-_e2d01.js
-0 110 0 4369141 0 0 0 0
+0 111 0 4377250 0 0 0 0
 /api/receiptdetails/read/13
 0 1 0 1950 0 0 0 0
 /css/app.css
-0 2534 0 53998275 0 0 0 0
+0 2559 0 54681250 0 0 0 0
 /api/accounts/read/Silva
 0 51 0 195887 0 0 0 0
 /empresas/NotaVenta/E1
 0 24 0 38976 1 0 0 0
 /api/reports/readrtss/TestASG
-0 4 0 20486 0 0 0 0
+0 5 0 22393 0 0 0 0
 /js/resources_js_Pages_Crud-Note_vue.js
-0 415 0 29227362 0 0 0 0
+0 417 0 29246236 0 0 0 0
 /empresas/cuentas/SilvaInc
 0 13 0 66400 0 0 0 0
 /api/accounts/read/TestASG
-0 108 0 492048 0 1 0 0
+0 120 0 551708 0 1 0 0
 /api/receiptdetails/read/11
-0 2 0 4954 0 0 0 0
+0 6 0 13054 0 0 0 0
 /js/343.js
 0 4 0 289924 0 0 0 0
 /empresas/cuentas/integracion/TestASG
-0 16 0 85922 0 0 0 0
+0 17 0 91295 0 0 0 0
 /api/receipt/read/Test45
 0 31 0 91010 0 0 0 0
 /api/period/read/4
@@ -134,13 +134,13 @@
 /empresas/lotes/Test45
 0 4 0 34221 0 0 0 0
 /api/user/data
-0 1499 0 2307133 8 4 0 0
+0 1541 0 2375817 8 6 0 0
 /api/receiptdetails/read/2
 0 1 0 2360 0 0 0 0
 /empresas/notas/E1
 0 25 0 449715 0 0 0 0
 /api/receiptdetails/read/7
-0 7 0 13282 0 0 0 0
+0 8 0 14969 0 0 0 0
 /empresas/gestiones/SilvaInc
 0 5 0 12691 0 0 0 0
 /js/230.js
@@ -164,11 +164,11 @@
 /js/475.js
 0 3 0 40145 0 0 0 0
 /api/companies/read
-0 118 0 201398 0 1 0 0
+0 125 0 212668 0 1 0 0
 /js/581.js
 0 12 0 584067 0 0 0 0
 /js/manifest.js
-0 1094 0 3305866 0 0 0 0
+0 1123 0 3439754 0 0 0 0
 /empresas/artículos/Test45
 0 84 0 659346 0 1 0 0
 /js/634.js
@@ -176,7 +176,7 @@
 /js/680.js
 0 2 0 142532 0 0 0 0
 /empresas/inicio/TestASG
-0 561 0 4494992 2 1 0 0
+0 568 0 4510034 2 1 0 0
 /js/167.js
 0 657 0 3815041 0 0 0 0
 /empresas/artículos/SilvaInc
@@ -194,9 +194,9 @@
 /js/12.js
 0 10 0 117256 0 0 0 0
 /js/resources_js_Pages_Login_vue.js
-0 9 0 23145 0 0 0 0
+0 13 0 33173 0 0 0 0
 /images/queeserp.svg
-0 3065 0 42179347 0 0 0 0
+0 3094 0 42587509 0 0 0 0
 /js/446.js
 0 2 0 38073 0 0 0 0
 /empresas/categorias/Silva
@@ -208,11 +208,11 @@
 /js/194.js
 0 18 0 335041 0 0 0 0
 /js/resources_js_Pages_ReportBI_vue.js
-0 2 0 106448 0 0 0 0
+0 3 0 114672 0 0 0 0
 /api/accounts/update
 0 5 0 9150 0 0 0 0
 /api/receiptdetails/read/10
-0 7 3262 15407 1 0 0 0
+0 11 0 29203 1 0 0 0
 /api/managementdate/read/SilvaInc
 0 53 0 100191 1 0 0 0
 /api/receiptdetails/read/1
@@ -220,9 +220,9 @@
 /empresas/tipo_de_cambio/Silvainc
 0 28 0 54292 0 0 0 0
 /js/resources_js_Pages_Crud-ExchangeRate_vue.js
-0 5 0 631218 0 0 0 0
+0 6 0 651632 0 0 0 0
 /js/resources_js_Pages_Dashboard_vue.js
-0 22 0 437818 0 0 0 0
+0 26 0 465406 0 0 0 0
 /empresas/cuentas/integracion/SilvaInc
 0 158 0 2788044 2 0 0 0
 /_ignition/health-check
@@ -234,7 +234,7 @@
 /api/managementdate/create
 0 8 0 14522 0 0 0 0
 /favicon.ico
-0 3267 0 1088403 0 0 0 0
+0 3318 0 1111026 0 0 0 0
 /empresas/tipo_de_cambio/Silva
 0 5 0 26224 0 0 0 0
 /api/receipt/read/Silvainc
@@ -242,7 +242,7 @@
 /js/983.js
 0 47 0 3631770 0 0 0 0
 /js/app.js
-0 2643 0 634754312 0 0 0 0
+0 2670 0 634831545 0 0 0 0
 /empresas/gestiones/Test45
 0 5 0 12341 0 0 0 0
 /js/79.js
@@ -258,23 +258,23 @@
 /empresas/cuentas/Silva
 0 12 0 90420 0 0 0 0
 /js/resources_js_Pages_CrudTable-Receipt_vue.js
-0 36 0 1554220 0 0 0 0
+0 61 0 2040723 0 0 0 0
 /empresas/categorias/TestASG
-0 293 0 4119834 1 1 0 0
+0 299 0 4161369 1 2 0 0
 /api/reports/readrtbi/TestASG
-0 2 0 3282 0 0 0 0
+0 3 0 5189 0 0 0 0
 /api/accounts/create
 0 74 0 122370 0 0 0 0
 /empresas/tipo_de_cambio/TestASG
-0 16 0 22779 0 0 0 0
+0 18 0 25487 0 0 0 0
 /api/reports/readrtlm/Silvainc
 0 3 0 15051 0 0 0 0
 /empresas
-0 140 0 1336879 0 0 0 0
+0 148 0 1384336 0 0 0 0
 /js/resources_js_Pages_Crud-Account_vue.js
-0 10 0 1456729 0 0 0 0
+0 11 0 1479522 0 0 0 0
 /js/resources_js_Pages_Crud-Company_vue.js
-0 20 0 916224 0 0 0 0
+0 26 0 974184 0 0 0 0
 /api/reports/readrtlm/TestASG
 0 4 0 16435 0 0 0 0
 /js/459.js
@@ -296,7 +296,7 @@
 /js/986.js
 0 17 0 131278 0 0 0 0
 /js/resources_js_Pages_Crud-AccountConfig_vue.js
-0 4 0 134346 0 0 0 0
+0 5 0 142693 0 0 0 0
 /empresas/cuentas/integracion/Silva
 0 6 0 31826 0 0 0 0
 /api/receiptdetails/read/18
@@ -310,23 +310,23 @@
 /js/717.js
 0 1 0 5627 0 0 0 0
 /js/resources_js_Pages_DetailNC_vue-_f6601.js
-0 180 0 7156781 0 0 0 0
+0 181 0 7164951 0 0 0 0
 /js/resources_js_Pages_Crud-ManagementDate_vue.js
-0 6 0 776465 0 0 0 0
+0 9 0 830789 0 0 0 0
 /empresas/gestiones/E1
 0 1 0 1329 0 0 0 0
 /empresas/notas/SilvaInc/crear/compra
 0 23 0 154268 0 0 0 0
 /api/receipt/delete
-0 1 0 1249 0 0 0 0
+0 2 0 2498 0 0 0 0
 /api/coincompany/getByCompanyId
-0 118 0 271070 1 1 0 0
+0 123 0 293975 1 1 0 0
 /js/vendor.js
-0 1073 0 215530764 0 0 0 0
+0 1098 0 226216539 0 0 0 0
 /empresas/notas/SilvaInc/crear/venta
 0 51 0 346011 0 0 0 0
 /api/managementdate/read/TestASG
-0 609 0 1020486 3 1 0 0
+0 626 0 1051179 4 1 0 0
 /empresas/tipo_de_cambio/E1
 0 1 0 1332 0 0 0 0
 /api/reports/readrtbi/Silva
@@ -338,7 +338,7 @@
 /api/period/read/2
 0 9 0 13154 0 0 0 0
 /empresas/artículos/TestASG
-0 63 0 428561 0 1 0 0
+0 77 0 528163 0 1 0 0
 /js/655.js
 0 22 0 32824 0 0 0 0
 /js/450.js
@@ -366,7 +366,7 @@
 /_debugbar/assets/javascript
 0 1067 0 392537782 1 5 0 0
 /fonts/vendor/primeicons/primeicons.ttf
-0 1538 0 103153183 0 0 0 0
+0 1560 0 104629281 0 0 0 0
 /empresas/categorias/Silvainc
 0 46 0 164027 0 0 0 0
 /empresas/notas/SilvaInc
@@ -394,13 +394,13 @@
 /empresas/notas/Silva
 0 211 0 3068270 0 0 0 0
 /empresas/comprobante/TestASG
-0 57 0 350406 0 0 0 0
+0 82 0 571641 3 0 0 0
 /js/354.js
 0 30 0 642491 0 0 0 0
 /js/268.js
 0 29 0 54100 0 0 0 0
 /empresas/cuentas/TestASG
-0 65 0 393068 1 0 0 0
+0 67 0 396284 1 0 0 0
 /api/reports/readrtbi/Silvainc
 0 1 0 1376 0 0 0 0
 /empresas/artículos/Silvainc
@@ -408,7 +408,7 @@
 /empresas/comprobante/Test45
 0 25 0 115265 0 1 0 0
 /empresas/notas/TestASG
-0 93 0 1350888 1 1 0 0
+0 104 0 1457655 1 1 0 0
 /empresas/cuentas/Silvainc
 0 31 0 68588 0 1 0 0
 /api/receiptdetails/read/15
@@ -416,9 +416,9 @@
 /_debugbar/assets/stylesheets
 0 1063 0 137079095 2 2 0 0
 /
-0 141 0 2090102 61 19 0 0
+0 153 0 2564647 70 24 0 0
 /api/receipt/read/TestASG
-0 80 0 264570 0 1 0 0
+0 115 0 393185 0 1 0 0
 /js/235.js
 0 37 0 2153438 0 0 0 0
 /empresas/cuentas/integracion/Silvainc
@@ -432,7 +432,7 @@
 /hash/admin
 0 1 0 15781 0 0 0 0
 /js/resources_js_Pages_ReportLD_vue.js
-0 3 0 165425 0 0 0 0
+0 4 0 173750 0 0 0 0
 /empresas/artículos/Silva
 0 194 0 2914139 0 0 0 0
 /empresas/inicio/E1
@@ -452,25 +452,25 @@
 /empresas/NotaCompra/E1
 0 45 0 211914 0 0 0 0
 /js/resources_js_Pages_ReportSS_vue.js
-0 2 0 107708 0 0 0 0
+0 3 0 116035 0 0 0 0
 /pruebita
 0 11 0 211956 0 1 0 0
 /empresas/gestiones/TestASG
-0 26 0 58922 0 0 0 0
+0 30 0 64858 0 0 0 0
 /js/614.js
 0 22 0 714326 0 0 0 0
 /js/resources_js_Pages_Crud-Item_vue.js
-0 141 0 13591543 0 0 0 0
+0 146 0 13646923 0 0 0 0
 /api/receiptdetails/read/9
 0 3 0 7931 0 0 0 0
 /api/reports/readrtld/TestASG
-0 9 0 42278 1 1 0 0
+0 11 0 56500 1 1 0 0
 /api/reports/readrtld/Silvainc
 0 35 0 281328 0 0 0 0
 /robots.txt
 0 15 0 20301 0 0 0 0
 /api/coins/read
-0 77 0 141146 0 0 0 0
+0 79 0 144322 0 0 0 0
 /api/receiptdetails/read/19
 0 1 0 1961 0 0 0 0
 /api/receiptdetails/read/6
@@ -488,7 +488,7 @@
 /api/receiptdetails/read/14
 0 1 0 2486 0 0 0 0
 /api/receipt/create
-0 9 0 16131 0 0 0 0
+0 10 0 17912 0 0 0 0
 /empresas/artículos/E1
 0 174 0 2948576 1 1 0 0
 /empresas/categorias/SilvaInc
@@ -498,7 +498,7 @@
 /empresas/tipo_de_cambio/Test45
 0 2 0 12960 0 0 0 0
 /js/resources_js_Pages_Crud-Category_vue.js
-0 271 0 3843307 0 0 0 0
+0 274 0 3879709 0 0 0 0
 /reporte/estado_resultados
 0 40 0 192111 1 1 0 0
 /js/313.js
@@ -507,6 +507,9 @@
 0 5 0 254545 0 0 0 0
 # End Of Table - urls
 # -sites- (monthly)
+8.34.202.9
+0 4 1 26945 1 1655082593 0 0
+-
 190.186.72.19
 0 1408 1371 65533276 15 1654435318 0 0
 /empresas/notas/SilvaInc
@@ -528,6 +531,9 @@
 44.236.207.248
 0 6 5 1045110 1 1654280622 0 0
 /_debugbar/assets/javascript
+181.115.208.252
+0 89 82 941032 1 1655079321 0 0
+/empresas/notas/TestASG
 186.121.247.154
 0 4 2 21863 1 1654299244 0 0
 /hash/admin
@@ -553,7 +559,7 @@
 0 2 0 70957 1 1654707112 0 0
 -
 40.77.167.78
-0 5 5 579093 0 0 0 0
+0 6 6 588691 0 0 0 0
 -
 190.129.180.75
 0 16 14 686880 2 1654559435 0 0
@@ -574,14 +580,14 @@
 0 60 0 23760 1 1654671103 0 0
 /
 82.145.215.206
-0 18 9 365435 9 1654901093 0 0
+0 22 11 416945 11 1655061214 0 0
 /
 93.158.92.13
 0 1 1 13573 1 1654565305 0 0
 /
 181.188.164.146
-0 2812 2559 121588266 17 1654911926 0 0
-/api/user/data
+0 3017 2748 129296441 19 1654922193 0 0
+/api/managementdate/read/TestASG
 181.115.161.215
 0 49 48 503038 1 1654820932 0 0
 /empresas/notas/TestASG
@@ -598,16 +604,22 @@
 0 1 1 5373 0 0 0 0
 -
 200.105.200.101
-0 28706 26726 1741373659 64 1654906256 0 0
-/empresas/categorias/TestASG
+0 28945 26943 1748590699 68 1654981019 0 0
+/
 109.70.100.83
 0 30 29 1034900 1 1654769916 0 0
+/
+167.94.138.44
+0 3 2 27841 2 1655009998 0 0
 /
 185.181.60.12
 0 2 1 13975 1 1654408423 0 0
 /
 207.46.13.59
 0 3 3 469311 2 1654770617 0 0
+/
+35.233.62.116
+0 1 1 13245 1 1654914587 0 0
 /
 143.137.113.4
 0 6 6 284956 1 1654820367 0 0
@@ -623,22 +635,16 @@
 -
 # End Of Table - sites (monthly)
 # -sites- (daily)
-177.222.110.183
-0 2 2 19171 0 0 0 0
+8.34.202.9
+0 4 1 26945 1 1655082593 0 0
 -
-181.188.164.146
-0 398 364 12038271 2 1654911926 0 0
-/api/user/data
-200.105.200.101
-0 22 20 616451 1 1654906256 0 0
-/empresas/categorias/TestASG
-35.237.4.214
-0 1 1 18815 0 0 0 0
--
+181.115.208.252
+0 89 82 941032 1 1655079321 0 0
+/empresas/notas/TestASG
 # End Of Table - sites (daily)
 # -referrers- 
 https://queeserp.tk/empresas/tipo_de_cambio/TestASG
-0 122
+0 132
 https://queeserp.tk/empresas/inicio/Silvainc
 0 1492
 https://queeserp.tk/api/reports/readrtss/Silvainc
@@ -676,7 +682,7 @@ https://queeserp.tk/empresas/cuentas/integracion/SilvaInc
 https://queeserp.tk/api/reports/readrtbi/Silva
 0 10
 https://queeserp.tk/empresas/cuentas/TestASG
-0 544
+0 552
 https://queeserp.tk/empresas/tipo_de_cambio/Test45
 0 20
 https://queeserp.tk/api/reports/readrtlm/TestASG
@@ -686,7 +692,7 @@ https://queeserp.tk/api/reports/readrtbi/Silvainc
 https://queeserp.tk/empresas/cuentas/SilvaInc
 0 213
 https://queeserp.tk/css/app.css
-0 797
+0 819
 https://queeserp.tk/empresas/notas/SilvaInc
 0 3513
 https://queeserp.tk/api/reports/readrtlm/SilvaInc
@@ -708,7 +714,7 @@ https://queeserp.tk/api/reports/readrtss/SilvaInc
 https://queeserp.tk/empresas/comprobante/E1
 0 20
 https://queeserp.tk/api/reports/readrtss/TestASG
-0 37
+0 44
 https://queeserp.tk/empresas/cuentas/integracion/Silva
 0 20
 https://queeserp.tk/empresas/gestiones/Silva
@@ -716,9 +722,9 @@ https://queeserp.tk/empresas/gestiones/Silva
 https://www.google.com/
 0 1
 - (Direct Request)
-0 4541
+0 4619
 https://queeserp.tk/empresas/notas/TestASG
-0 581
+0 600
 http://queeserp.tk/humans.txt
 0 1
 http://queeserp.tk/robots.txt
@@ -732,13 +738,13 @@ https://queeserp.tk/empresas/cuentas/integracion/Silvainc
 https://queeserp.tk/api/reports/readrtbi/SilvaInc
 0 11
 https://queeserp.tk/
-0 560
+0 592
 https://queeserp.tk/empresas/artículos/TestASG
-0 210
+0 243
 https://queeserp.tk/empresas/notas/Silva
 0 814
 https://queeserp.tk/api/reports/readrtld/TestASG
-0 30
+0 36
 https://queeserp.tk/empresas/notas/E1
 0 165
 https://queeserp.tk/empresas/comprobante/SilvaInc
@@ -764,7 +770,7 @@ https://queeserp.tk/empresas/tipo_de_cambio/E1
 https://queeserp.tk/empresas/comprobante/Silvainc
 0 395
 https://queeserp.tk/empresas/categorias/TestASG
-0 2065
+0 2078
 https://queeserp.tk/empresas/notas/SilvaInc/crear/compra
 0 101
 https://queeserp.tk/empresas/cuentas/Test45
@@ -772,13 +778,13 @@ https://queeserp.tk/empresas/cuentas/Test45
 https://queeserp.tk/empresas/categorias/Test45
 0 90
 https://queeserp.tk/empresas/comprobante/TestASG
-0 396
+0 624
 https://queeserp.tk/empresas/artículos/SilvaInc
 0 267
 https://queeserp.tk/api/reports/readrtld/Silva
 0 6
 https://queeserp.tk/empresas/inicio/TestASG
-0 4820
+0 4852
 https://queeserp.tk/empresas/gestiones/Silvainc
 0 205
 https://queeserp.tk/empresas/categorias/SilvaInc
@@ -796,11 +802,11 @@ https://queeserp.tk/empresas/NotaVenta/E1
 https://queeserp.tk/hash/admin
 0 1
 https://queeserp.tk/empresas/cuentas/integracion/TestASG
-0 55
+0 56
 https://queeserp.tk/api/reports/readrtlm/Silva
 0 2
 https://queeserp.tk/api/reports/readrtbi/TestASG
-0 14
+0 21
 https://queeserp.tk/empresas/NotaCompra/E1
 0 294
 https://queeserp.tk/api/reports/readrtld/E1
@@ -808,7 +814,7 @@ https://queeserp.tk/api/reports/readrtld/E1
 https://queeserp.tk/empresas/cuentas/Silva
 0 134
 https://queeserp.tk/empresas/gestiones/TestASG
-0 176
+0 190
 https://queeserp.tk/images/queeserp.svg
 0 1
 https://queeserp.tk/empresas/inicio/Test45
@@ -818,11 +824,11 @@ https://queeserp.tk/empresas/categorias/Silvainc
 https://queeserp.tk/api/reports/readrtld/SilvaInc
 0 24
 https://queeserp.tk/empresas
-0 673
+0 709
 # End Of Table - referrers
 # -agents- 
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36
-0 2
+0 11
 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36
 0 8
 Mozilla/5.0 (compatible; NetcraftSurveyAgent/1.0; +info@netcraft.com)
@@ -833,16 +839,18 @@ Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)
 0 2
 Mozilla/5.0 (Linux; Android 11; Redmi Note 9S) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537
 0 16
+Mozilla/5.0 (compatible; CensysInspect/1.1; +https://about.censys.io/)
+0 3
 Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)
 0 11
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36
-0 27900
+0 27977
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.99 Safari/537.36
-0 3500
+0 3730
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36
 0 10
 Go-http-client/1.1
-0 9
+0 11
 Mozilla/5.0 (X11; CrOS i686 3912.101.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36
 0 2
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36 OPR/86.0
@@ -855,14 +863,20 @@ Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (K
 0 89
 Mozilla/5.0 (Linux; Android 9; Redmi Note 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.3
 0 16
+Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36
+0 89
 Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0
 0 8
+python-requests/2.28.0
+0 1
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36 Edg/91.0.
+0 4
+python-requests/2.27.1
 0 4
 Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0
 0 6
 Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Sa
-0 9
+0 11
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
 0 574
 Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36
@@ -870,9 +884,9 @@ Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95
 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4695.0 Safari/537.36 Chrom
 0 176
 Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Mobile Saf
-0 781
+0 909
 Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)
-0 1
+0 2
 # End Of Table - agents
 # -search strings- 
 # End Of Table - search strings

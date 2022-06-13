@@ -74,7 +74,7 @@
             :resizableColumns="true"
             columnResizeMode="fit"
             class="p-datatable-lg"
-            :value="company.receipts"
+            :value="receipts"
             dataKey="id_receipt"
             :paginator="true"
             :rows="10"
@@ -113,7 +113,7 @@
             >
             </Column>
             <Column
-                field="status"
+                field="status_c"
                 header="Estado"
                 :sortable="true"
                 filterMatchMode="contains"
@@ -231,7 +231,6 @@ export default {
                 date.receipt_type = this.getReceiptType(
                     parseInt(date.receipt_type)
                 );
-                this.status = this.returnStatus(parseInt(date.status));
             });
         },
         toggleMenu() {
@@ -245,15 +244,19 @@ export default {
                 })
                 .then((response) => {
                     this.userData = response.data.userData;
-                    console.log("usuario:", this.userData);
                 });
         },
         setData() {
             const company = window.location.pathname.split("/").pop();
             axios.get(route("receipts.api.read", company)).then((response) => {
-                console.log("Datos de compañia", this.company);
                 this.company = response.data.company;
-                this.receipts = response.data.company.receipts;
+                this.receipts = response.data.company.receipts.map((val) => {
+                    return {
+                        ...val,
+                        status_c: this.returnStatus(val.status),
+                    };
+                });
+
                 this.transformData();
             });
             this.loaded_company = true;

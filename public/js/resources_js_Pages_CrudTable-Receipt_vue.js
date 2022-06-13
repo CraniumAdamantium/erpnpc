@@ -23,6 +23,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var primevue_tooltip__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! primevue/tooltip */ "./node_modules/primevue/tooltip/tooltip.esm.js");
 /* harmony import */ var primevue_inputtext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! primevue/inputtext */ "./node_modules/primevue/inputtext/inputtext.esm.js");
 /* harmony import */ var _DetailReceipts_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./DetailReceipts.vue */ "./resources/js/Pages/DetailReceipts.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -126,7 +132,6 @@ __webpack_require__.r(__webpack_exports__);
       this.receipts.forEach(function (date) {
         date.date = dayjs__WEBPACK_IMPORTED_MODULE_5___default()(date.date).format("DD/MM/YYYY");
         date.receipt_type = _this.getReceiptType(parseInt(date.receipt_type));
-        _this.status = _this.returnStatus(parseInt(date.status));
       });
     },
     toggleMenu: function toggleMenu() {
@@ -139,7 +144,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       }).then(function (response) {
         _this2.userData = response.data.userData;
-        console.log("usuario:", _this2.userData);
       });
     },
     setData: function setData() {
@@ -147,9 +151,12 @@ __webpack_require__.r(__webpack_exports__);
 
       var company = window.location.pathname.split("/").pop();
       axios__WEBPACK_IMPORTED_MODULE_0___default().get(route("receipts.api.read", company)).then(function (response) {
-        console.log("Datos de compañia", _this3.company);
         _this3.company = response.data.company;
-        _this3.receipts = response.data.company.receipts;
+        _this3.receipts = response.data.company.receipts.map(function (val) {
+          return _objectSpread(_objectSpread({}, val), {}, {
+            status_c: _this3.returnStatus(val.status)
+          });
+        });
 
         _this3.transformData();
       });
@@ -1111,7 +1118,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     resizableColumns: true,
     columnResizeMode: "fit",
     "class": "p-datatable-lg",
-    value: $data.company.receipts,
+    value: $data.receipts,
     dataKey: "id_receipt",
     paginator: true,
     rows: 10,
@@ -1146,7 +1153,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         sortable: true,
         filterMatchMode: "contains"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
-        field: "status",
+        field: "status_c",
         header: "Estado",
         sortable: true,
         filterMatchMode: "contains"

@@ -181,16 +181,17 @@
                         v-model="values.description"
                     />
                 </div>
-
                 <div>
                     <span class="block text-sm font-bold mb-2">
                         Precio de venta *
                     </span>
-                    <InputText
+                    <InputNumber
                         class="w-full"
                         type="number"
                         placeholder="Precio de venta para el item"
                         v-model="values.sale_price"
+                        style="text-align: right"
+                        step=".01"
                     />
                 </div>
                 <div>
@@ -269,6 +270,7 @@ import Tooltip from "primevue/tooltip";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
+import InputNumber from "primevue/inputtext";
 import Dialog from "primevue/dialog";
 import { reactive } from "@vue/reactivity";
 import MultiSelect from "primevue/multiselect";
@@ -287,6 +289,7 @@ export default {
         DataTable,
         Navbar,
         InputText,
+        InputNumber,
     },
     props: {
         userData: {
@@ -400,13 +403,6 @@ export default {
                 Notify.failure("El nombre debe tener al menos 3 caracteres");
                 paso = false;
             }
-            if (values.description == "" || values.description.length < 3) {
-                Notify.failure(
-                    "La descripción debe tener al menos 3 caracteres"
-                );
-                paso = false;
-            }
-
             if (values.sale_price == "" || values.sale_price <= 0) {
                 Notify.failure("El precio debe ser mayor a 0");
                 paso = false;
@@ -541,5 +537,16 @@ export default {
 td.preciotrucho {
     text-align: right !important;
     display: inline !important;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 </style>

@@ -248,7 +248,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       receipt_type: 1,
       details: [],
       actionButtons: false,
-      editMode: "cell"
+      editMode: "cell",
+      isNote: 0
     };
   },
   mounted: function mounted() {
@@ -358,9 +359,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     },
     setData: function setData() {
-      console.log("Datos compania", this.id_company);
+      console.log("Datos compania", this.receipt);
 
       if (Object.keys(this.receipt).length > 0) {
+        this.getNotes();
         this.status = this.returnStatus(this.receipt.status);
         this.receipt_type = this.transformReceipt_type(this.receipt.receipt_type);
         this.serial = this.receipt.serial_number;
@@ -378,6 +380,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         var today = new Date();
         this.date = today;
       }
+    },
+    getNotes: function getNotes() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post(route("receipt.api.getReceiptNotes"), {
+        id_receipt: this.receipt.id_receipt
+      }).then(function (response) {
+        if (response.data.success) {
+          _this.isNote = response.data.note;
+          if (_this.isNote == 1) document.getElementById("trash_receipt").disabled = true;
+        }
+      })["catch"](function (error) {
+        notiflix_build_notiflix_notify_aio__WEBPACK_IMPORTED_MODULE_5__.Notify.failure(error.response.data.message);
+      });
     },
     transformReceipt_type: function transformReceipt_type(receipt_type) {
       switch (receipt_type) {
@@ -407,7 +423,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.$emit("hideThis");
     },
     getSelectedCoinsByCompany: function getSelectedCoinsByCompany(id_company) {
-      var _this = this;
+      var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().post(route("coincompany.api.getByCompanyId", {
         id_company: id_company
@@ -417,19 +433,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         });
         console.log("Active", active); // console.log("response: ", active.id_maincoin);
 
-        _this.selectedCoin = active.id_maincoin;
-        _this.coins = [{
+        _this2.selectedCoin = active.id_maincoin;
+        _this2.coins = [{
           value: active.id_maincoin,
           text: "".concat(active.m_name, " (").concat(active.m_initials, ")")
         }, {
           value: active.id_alternativecoin,
           text: "".concat(active.a_name, " (").concat(active.a_initials, ")")
         }];
-        _this.exchange = active.exchange;
+        _this2.exchange = active.exchange;
       });
     },
     addReceipt: function addReceipt() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.validateData()) return;
       var today = this.date;
@@ -451,7 +467,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           notiflix_build_notiflix_notify_aio__WEBPACK_IMPORTED_MODULE_5__.Notify.success("Comprobante creado con éxito");
           localStorage.removeItem("detailsReceipt");
 
-          _this2.disableComponents(); // this.backToTable();
+          _this3.disableComponents(); // this.backToTable();
 
         }
       })["catch"](function (error) {
@@ -459,7 +475,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     deleteReceipt: function deleteReceipt() {
-      var _this3 = this;
+      var _this4 = this;
 
       notiflix_build_notiflix_confirm_aio__WEBPACK_IMPORTED_MODULE_6__.Confirm.init({
         titleColor: "#FF0000",
@@ -472,9 +488,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           svgSize: "200"
         });
         var params = {
-          serial: _this3.serial,
-          id_company: _this3.id_company,
-          id_user: _this3.id_user
+          serial: _this4.serial,
+          id_company: _this4.id_company,
+          id_user: _this4.id_user
         };
         notiflix_build_notiflix_notify_aio__WEBPACK_IMPORTED_MODULE_5__.Notify.init({
           clickToClose: true
@@ -483,12 +499,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           var _res$data;
 
           if ((_res$data = res.data) !== null && _res$data !== void 0 && _res$data.success) {
-            _this3.$emit("update-data");
+            _this4.$emit("update-data");
 
             notiflix_build_notiflix_notify_aio__WEBPACK_IMPORTED_MODULE_5__.Notify.success("Comprobante anulado");
-            _this3.status = "Anulado";
+            _this4.status = "Anulado";
 
-            _this3.disableComponents();
+            _this4.disableComponents();
           } else {
             notiflix_build_notiflix_notify_aio__WEBPACK_IMPORTED_MODULE_5__.Notify.failure(res.data.message);
           }
@@ -1656,7 +1672,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 24 24",
     stroke: "currentColor"
   }, _hoisted_7)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_TransparentDropDown, {
-    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName]],
+    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName], ['Reporte de Estado de Resultados', 'reportea.api.read', $props.companyName]],
     value: "Reportes"
   }, null, 8
   /* PROPS */

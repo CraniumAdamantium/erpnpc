@@ -28,5 +28,8 @@ class Receipt extends Model
     {
         return $this->hasMany(ReceiptDetail::class, 'id_receipt', 'id_receipt');
     }
-
+    public function coin()
+    {
+        return $this->belongsTo(Coin::class, 'id_coin', 'id_coin');
+    }
 }

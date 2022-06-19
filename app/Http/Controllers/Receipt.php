@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Company as ModelCompany;
 use App\Models\Receipt as ReceiptModel;
 use App\Models\ManagementDate as ModelManagementDate;
+use App\Models\Notes as ModelNotes;
 use App\Models\Period as ModelPeriod;
 use App\Models\ReceiptDetail;
 use Carbon\Carbon;
@@ -203,5 +204,10 @@ class Receipt extends Controller
             ->where('companies.status', 1)
             ->orderByDesc('serial_number')->get()->count();
         return response()->json(['success' => true, 'lastID' => $lastID]);
+    }
+    public function getNotes(Request $response){
+        $esdeNota = ReceiptModel::join('notes', 'receipts.id_receipt', '=', 'notes.id_receipt')
+        ->where('notes.id_receipt', $response->id_receipt)->get()->count();
+        return response()->json(['success' => true, 'note' => $esdeNota]);
     }
 }

@@ -2,18 +2,8 @@
     <Navbar :userName="user.name" :companyName="company.name" />
 
     <div class="w-11/12 ml-auto mr-auto mt-2">
-        <p class="text-2xl text-white mb-2">Administracion de categorias</p>
         <div class="flex">
-            <span class="p-input-icon-left">
-                <i class="pi pi-search" />
-                <InputText
-                    placeholder="Filtrar por cantidad menor a..."
-                    class="w-72"
-                    type="number"
-                    v-model="data.filter_quantity"
-                    @keyup="recreate()"
-                />
-            </span>
+            <p class="text-2xl text-white mb-2">Administracion de categorias</p>
             <div class="flex ml-auto items-center">
                 <button
                     class="px-2 py-2 m-1 bg-green-500 text-white rounded-lg"
@@ -94,7 +84,7 @@
                 </button>
             </div>
         </div>
-        <Tree
+        <TreeTable
             class="overflow-x-scroll overflow-y-scroll mt-1"
             style="max-height: 70vh; max-width: 92vw"
             :value="data.categorias_tratadas"
@@ -103,11 +93,30 @@
             v-model:selectionKeys="data.selectedCategoryKeysKeys"
             @node-select="onNodeSelect"
             @node-unselect="onNodeUnselect"
-            :filter="true"
-            filterMode="lenient"
-            filterPlaceholder="Filtrar por nombre"
+            :filters="data.filters"
+            filterMatchMode="custom"
         >
-        </Tree>
+            <template #empty> No hay categorías </template>
+            <Column field="name" :expander="true" filterMatchMode="contains">
+                <template #header>
+                    <InputText
+                        type="text"
+                        v-model="data.filters['name']"
+                        class="p-column-filter"
+                        placeholder="Filtrar por nombre"
+                    />
+                </template>
+            </Column>
+            <Column field="quantity" filterMatchMode="lte"
+                ><template #header>
+                    <InputText
+                        type="text"
+                        v-model="data.filters['quantity']"
+                        class="p-column-filter"
+                        placeholder="Filtrar por cantidad"
+                    /> </template
+            ></Column>
+        </TreeTable>
     </div>
     <h1 class="text-white text-center mt-2">
         Copyright© <a href="https://github.com/Hyhy092">JASM</a>
@@ -193,12 +202,14 @@
     <!-- Modal to create -->
 </template>
 <script>
-import Tree from "primevue/tree";
+import TreeTable from "primevue/treetable";
+import Column from "primevue/column";
 import Dialog from "primevue/dialog";
 import Navbar from "./SimpleTemplates/Navbar";
-import { computed, onMounted, reactive } from "@vue/runtime-core";
+import { computed, onMounted, reactive, watch } from "@vue/runtime-core";
 import InputText from "primevue/inputtext";
 import { Inertia } from "@inertiajs/inertia";
+
 import { Notify, Loading } from "notiflix";
 const focus = {
     mounted: (el) => el.focus(),
@@ -207,7 +218,7 @@ export default {
     directives: {
         focus,
     },
-    components: { Tree, Navbar, Dialog, InputText },
+    components: { TreeTable, Column, Navbar, Dialog, InputText },
     props: {
         company: {
             type: Object,
@@ -228,8 +239,18 @@ export default {
             name: "",
             description: "",
             categoria_seleccionada: {},
-            filter_quantity: "",
+            minval: "",
+            filters: {},
         });
+        watch(
+            () => data.filters,
+            (newVal) => {
+                if (newVal.quantity == "") {
+                    data.filters.quantity = null;
+                }
+            },
+            { deep: true }
+        );
 
         /* Iterar sobre todos los valores del arbol "categorias_tratadas" y determinar si el label es menor a */
 
@@ -256,10 +277,13 @@ export default {
         };
         const crearArbol = () => {
             let arrayToTree = (array) => {
+                console.log("Partimos de", array);
                 array.forEach((node, index) => {
                     node.key = node.id_category;
                     /* Esta basura silva, si me preguntas, con esto lo hago */
                     let quantity = 0;
+                    //Es algo de aca, hay que evitar que se repita esta basura, se suma la cantidad
+
                     node.articles?.forEach((article) => {
                         article.notes_lot.forEach((notes_lot) => {
                             if (notes_lot.deleted_at == null) {
@@ -267,29 +291,19 @@ export default {
                             }
                         });
                     });
-
-                    node.label = node.name;
-
-                    node.label = node.name + " - [" + quantity + "]";
-
-                    if (
+                    node.data = {};
+                    node.data.quantity = quantity;
+                    node.data.name = node.name;
+                    /* if (
                         quantity > data.filter_quantity &&
                         data.filter_quantity != ""
                     ) {
-                        node.filter = true;
-                        /* Trim from array */
-                    } else {
-                        node.filter = false;
-                    }
-                    /* ============== */
-                });
-
-                const earray = array.filter((val) => {
-                    return !val.filter;
+                        return;
+                    } */
                 });
 
                 let findParentIndex = (id_parent) => {
-                    return earray.findIndex(
+                    return array.findIndex(
                         (node) => node.id_category == id_parent
                     );
                 };
@@ -300,51 +314,59 @@ export default {
                     });
                 };
                 let hasChildren = (id) => {
-                    return earray.find((node) => node.id_parent_category == id);
+                    return array.find((node) => node.id_parent_category == id);
                 };
-                let check = allParentsNull(earray);
-                let count = 0;
-                /* Ignore here for filter */
+                let check = allParentsNull(array);
 
+                /* Ignore here for filter */
+                let count = 0;
                 while (check) {
-                    for (let i = 0; i < earray.length; i++) {
-                        if (earray[i].id_parent_category != null) {
+                    for (let i = 0; i < array.length; i++) {
+                        if (array[i].id_parent_category != null) {
                             if (
-                                hasChildren(earray[i].id_category) == undefined
+                                hasChildren(array[i].id_category) == undefined
                             ) {
                                 let indexParent = findParentIndex(
-                                    earray[i].id_parent_category
+                                    array[i].id_parent_category
                                 );
 
                                 if (indexParent != -1) {
-                                    let padre = earray[indexParent];
+                                    let padre = array[indexParent];
 
                                     if (!padre.children) {
                                         padre.children = [];
                                     }
+                                    padre.data.quantity +=
+                                        array[i].data.quantity;
 
-                                    padre.children.push(earray[i]);
+                                    console.log("Pusheando");
+                                    padre.children.push(array[i]);
                                 }
-
-                                earray.splice(i, 1);
+                                array.splice(i, 1);
                             }
                         }
                     }
 
-                    check = allParentsNull(earray);
+                    check = allParentsNull(array);
 
                     count++;
                     if (count > 100) {
                         break;
                     }
                 }
-                console.log("Terminado en ", count, " iteraciones", earray);
+
+                console.log("Terminado en ", count, " iteraciones", array);
                 let tree = [
                     {
-                        label: "Categorias",
-                        children: earray,
+                        key: null,
+                        data: {
+                            name: "Categorias",
+                            quantity: "Cantidad",
+                        },
+                        children: array,
                     },
                 ];
+
                 return tree;
             };
             //Assign porque proxy prop no es editable
@@ -422,6 +444,7 @@ export default {
                 Notify.failure("Selecciona una categoría");
                 return;
             }
+            console.log(data.selectedCategory, "xd");
             Loading.standard({
                 clickToClose: false,
                 svgSize: "200",
@@ -432,7 +455,7 @@ export default {
                     id: data.selectedCategory.id_category,
                 },
                 {
-                    only: ["company"],
+                    only: ["company", "errors", "flash"],
                     preserveState: true,
                     preserveScroll: true,
                     onSuccess: () => {
@@ -442,9 +465,12 @@ export default {
                         data.selectedCategory = {};
                         data.categorias_tratadas = crearArbol();
                     },
-                    onError: () => {
+                    onError: (error) => {
+                        console.log(error);
                         Loading.remove();
-                        Notify.error("Error al eliminar la categoria");
+                        for (let i in error) {
+                            Notify.failure(error[i]);
+                        }
                     },
                 }
             );

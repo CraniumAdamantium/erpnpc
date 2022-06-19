@@ -61,6 +61,7 @@
                         v-if="Object.keys(details).length > 0"
                         class="disabled:bg-indigo-800 bg-indigo-700 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm px-2 py-2 text-center mr-2"
                         id="showReport"
+                        @click="goReport()"
                     >
                         <svg
                             width="24"
@@ -126,7 +127,7 @@
                     v-model="values.description"
                 />
             </div>
-            <div class="flex flex-col ml-auto mt-2">
+            <div style="display: none" class="flex flex-col ml-auto mt-2">
                 <p class="text-base text-white">Total</p>
                 <p class="mt-1 text-xl text-white text-center self-center">
                     {{ values.total }}
@@ -138,6 +139,10 @@
                 :value="values.table"
                 :editMode="Object.keys(details).length > 0 ? '' : 'cell'"
                 @cell-edit-complete="onCellEditComplete"
+                class="p-datatable-sm"
+                :scrollable="true"
+                scrollHeight="350px"
+                responsiveLayout="scroll"
             >
                 <template #empty> No hay artículos, añade uno! </template>
                 <template #header v-if="Object.keys(details).length == 0">
@@ -169,9 +174,11 @@
                         <div class="self-end w-full">
                             <p class="text-center">Precio</p>
                             <InputText
+                                style="text-align: right"
                                 class="w-full text-center text-lg text-white"
-                                v-model="valuesToPush.sale_price"
-                                placeholder="Ingresa el precio"
+                                v-model="valuesToPush.article.price"
+                                disabled
+                                placeholder="0"
                                 type="number"
                                 @change="nozero()"
                             />
@@ -205,6 +212,12 @@
                     header="Articulo"
                     :sortable="true"
                 ></Column>
+                <Column
+                    field="id_note_lot"
+                    header="Lote Nº"
+                    :sortable="true"
+                ></Column>
+
                 <!-- Fecha de entrada es la fecha de la nota de compra -->
 
                 <Column field="quantity" header="Cantidad" :sortable="true"
@@ -214,16 +227,24 @@
                         /> </template
                 ></Column>
                 <Column
-                    field="id_note_lot"
-                    header="Lote Nº"
+                    class="priceTrash"
+                    field="sale_price"
+                    header="Precio"
                     :sortable="true"
-                ></Column>
-                <Column field="sale_price" header="Precio" :sortable="true">
-                    <template #editor="slotProps">
-                        <InputText
-                            v-model="slotProps.data[slotProps.field]"
-                        /> </template
-                ></Column>
+                >
+                </Column>
+                <Column
+                    class="subtotalTrash"
+                    header="Subtotal"
+                    :sortable="true"
+                >
+                    <template #body="slotProps">
+                        {{
+                            slotProps.data.sale_price * slotProps.data.quantity
+                        }}
+                    </template>
+                    <template #footer> Total: {{ values.total }} </template>
+                </Column>
                 <Column
                     header="Eliminar"
                     field="number"
@@ -242,6 +263,7 @@
                     header="Estado"
                     field="deleted_at"
                     v-if="Object.keys(details).length > 0"
+                    style="display: none"
                 >
                     <template #body="slotProps">
                         <span
@@ -311,13 +333,13 @@ export default {
                     })
                     .forEach((note) => {
                         note.notes_lot.forEach((lot) => {
-                            console.log(lot, "Lote?");
+                            // console.log(lot, "Lote?");
                             if (lot.pivot.quantity > 0) {
                                 artic.push(lot);
                             }
                         });
                     });
-                console.log(artic);
+                // console.log(artic);
                 return artic
                     .map((art) => {
                         return {
@@ -328,17 +350,34 @@ export default {
                                 " / [" +
                                 art.pivot.quantity +
                                 "]",
+                            // Aqui
+                            lote: art.pivot.id_note_lot,
                             value: art.pivot.id_note_lot,
                             id_article: art.id_article,
                             quantity: art.pivot.quantity,
                             name: art.name,
+                            price: props.company.articles.find(
+                                (article) =>
+                                    article.id_article == art.id_article
+                            ).sale_price,
                         };
                     })
                     .filter((art) => {
-                        console.log(art, "pruebita");
+                        // console.log(art, "pruebita");
                         //Filter if it's in table
                         return !values.table.some((fila) => {
-                            return fila.id_article == art.id_article;
+                            // Y aqui
+                            // Intento de arreglo hecho por Silva 🤑, evalualo del 1 al 10 link
+                            console.log(
+                                "Lote de fila: ",
+                                fila.id_note_lot,
+                                "Lote de art: ",
+                                art
+                            );
+                            return (
+                                fila.id_article == art.id_article &&
+                                fila.id_note_lot == art.lote
+                            );
                         });
                     });
             },
@@ -377,7 +416,7 @@ export default {
             article: {}, //ok
             expiration_date: "", //ok
             quantity: 1, //ok
-            sale_price: 1,
+            //sale_price: 1, linea 414 lo reemplaza
         });
         const validate = () => {
             let go = true;
@@ -405,6 +444,7 @@ export default {
             if (!validate()) return;
             values.table.push({
                 ...valuesToPush,
+                sale_price: valuesToPush.article.price,
                 id_article: valuesToPush.article.id_article,
                 article_name: valuesToPush.article.name,
                 id_note_lot: valuesToPush.article.value,
@@ -446,6 +486,7 @@ export default {
             return response;
         };
         const delete_that = (num) => {
+            console.log(num);
             //Find index of id_article
             let index = values.table.findIndex((item) => {
                 return item.id_article == num;
@@ -488,6 +529,7 @@ export default {
                 table: table,
                 total: values.total,
             };
+            // Mandas la data de acuerdo al id del articulo, por eso solo se inserta 1 vez, supongo 🥺
             console.log("Data enviada", data);
 
             Inertia.post(route("notes.api.create_v"), data, {
@@ -578,5 +620,35 @@ export default {
     background-color: rgb(107 114 128) !important;
     opacity: 1 !important;
     color: white !important;
+}
+.subtotalTrash > .p-column-header-content,
+.priceTrash > .p-column-header-content {
+    display: inline-flex;
+    align-items: right;
+    margin-left: auto;
+}
+td.subtotalTrash,
+td.priceTrash {
+    text-align: right !important;
+    display: inline !important;
+}
+.p-datatable-tfoot > tr > td.subtotalTrash,
+.p-datatable-tfoot > tr > td.priceTrash {
+    display: inline-flex;
+    align-items: right;
+    margin-left: auto;
+    text-align: right !important;
+    display: inline !important;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 </style>

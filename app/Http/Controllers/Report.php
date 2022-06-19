@@ -12,6 +12,18 @@ use App\Models\CoinCompany as ModelCoinCompany;
 
 class Report extends Controller
 {
+    public function readrtea($company)
+    {
+        $exists = Company::where('name', urldecode($company))->where('id_user', Auth::user()->id_user)->where('status', 1)
+            ->with(['management_dates.periods'])->with('coin_companies.main_coin')->with('coin_companies.alternative_coin')->first();
+        if ($exists) {
+            return Inertia::render('ReportEA', [
+                'company' => $exists,
+                'user' => Auth::user()
+            ]);
+        }
+        return Redirect::route('companies');
+    }
     public function readrtld($company)
     {
 
@@ -28,7 +40,7 @@ class Report extends Controller
     public function readrtlm($company)
     {
         $exists = Company::where('name', urldecode($company))->where('id_user', Auth::user()->id_user)->where('status', 1)
-        ->with(['management_dates.periods'])->with('coin_companies.main_coin')->with('coin_companies.alternative_coin')->first();
+            ->with(['management_dates.periods'])->with('coin_companies.main_coin')->with('coin_companies.alternative_coin')->first();
         if ($exists) {
             return Inertia::render('ReportLM', [
                 'company' => $exists,

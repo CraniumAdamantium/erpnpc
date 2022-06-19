@@ -225,6 +225,16 @@ var map = {
 		"/js/vendor",
 		"resources_js_Pages_ReportBI_vue"
 	],
+	"./ReportEA": [
+		"./resources/js/Pages/ReportEA.vue",
+		"/js/vendor",
+		"resources_js_Pages_ReportEA_vue"
+	],
+	"./ReportEA.vue": [
+		"./resources/js/Pages/ReportEA.vue",
+		"/js/vendor",
+		"resources_js_Pages_ReportEA_vue"
+	],
 	"./ReportLD": [
 		"./resources/js/Pages/ReportLD.vue",
 		"/js/vendor",

@@ -20,4 +20,8 @@ class Account extends Model
         'id_company',
         'id_user'
     ];
+    public function receiptsdetails()
+    {
+        return $this->hasMany(ReceiptDetail::class, 'id_account', 'id_account');
+    }
 }

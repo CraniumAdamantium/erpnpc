@@ -268,6 +268,7 @@ export default {
             details: [],
             actionButtons: false,
             editMode: "cell",
+            isNote: 0,
         };
     },
     mounted() {
@@ -361,8 +362,9 @@ export default {
             }
         },
         setData() {
-            console.log("Datos compania", this.id_company);
+            console.log("Datos compania", this.receipt);
             if (Object.keys(this.receipt).length > 0) {
+                this.getNotes();
                 this.status = this.returnStatus(this.receipt.status);
                 this.receipt_type = this.transformReceipt_type(
                     this.receipt.receipt_type
@@ -382,6 +384,24 @@ export default {
                 let today = new Date();
                 this.date = today;
             }
+        },
+        getNotes() {
+            axios
+                .post(route("receipt.api.getReceiptNotes"), {
+                    id_receipt: this.receipt.id_receipt,
+                })
+                .then((response) => {
+                    if (response.data.success) {
+                        this.isNote = response.data.note;
+                        if (this.isNote == 1)
+                            document.getElementById(
+                                "trash_receipt"
+                            ).disabled = true;
+                    }
+                })
+                .catch((error) => {
+                    Notify.failure(error.response.data.message);
+                });
         },
         transformReceipt_type(receipt_type) {
             switch (receipt_type) {

@@ -27,9 +27,6 @@ class Company extends Model
     {
         return $date->timezone('America/La_Paz')->format('d/m/Y H:i');
     }
-    
-
-
     public function management_dates()
     {
         return $this->hasMany(ManagementDate::class, 'id_company', 'id_company');

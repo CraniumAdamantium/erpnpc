@@ -112,6 +112,7 @@
                                 Object.keys(values.selectedNote ?? {}).length ==
                                 0
                             "
+                            style="display: none"
                             @click="deleteNote()"
                         >
                             <svg
@@ -156,6 +157,7 @@
         :userData="userData"
         @goback="goto()"
         :details="values.selectedNote"
+        @delete="deleteNote()"
     >
     </DetailsNV>
     <DetailsNC

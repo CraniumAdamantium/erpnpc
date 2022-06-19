@@ -68,6 +68,11 @@
                                 'reportss.api.read',
                                 companyName,
                             ],
+                            [
+                                'Reporte de Estado de Resultados',
+                                'reportea.api.read',
+                                companyName,
+                            ],
                         ]"
                         value="Reportes"
                     />

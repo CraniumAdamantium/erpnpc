@@ -127,25 +127,23 @@
                     v-model="values.description"
                 />
             </div>
-            <div class="flex flex-col ml-auto mt-2">
-                <p class="text-base text-white">Total</p>
-                <p class="mt-1 text-xl text-white text-center self-center">
-                    {{ values.total }}
-                </p>
-            </div>
         </div>
         <div class="w-11/12 mx-auto">
             <DataTable
                 :value="values.table"
                 :editMode="Object.keys(details).length > 0 ? '' : 'cell'"
                 @cell-edit-complete="onCellEditComplete"
+                class="p-datatable-sm"
+                :scrollable="true"
+                scrollHeight="350px"
+                responsiveLayout="scroll"
             >
                 <template #empty> No hay artículos, añade uno! </template>
                 <template #header v-if="Object.keys(details).length == 0">
                     <div
                         class="flex flex-row justify-between gap-2 items-center"
                     >
-                        <div class="self-end mx-2">
+                        <div class="self-end mx-2" style="display: none">
                             <p class="text-center">Número</p>
                             <p class="text-center text-lg text-white m-4">
                                 {{ actualLoteNumber }}
@@ -163,6 +161,16 @@
                             />
                         </div>
                         <div class="self-end w-full">
+                            <p class="text-center">Fecha de expiración</p>
+                            <Calendar
+                                dateFormat="dd/mm/yy"
+                                class="w-full text-center text-lg text-white"
+                                v-model="valuesToPush.expiration_date"
+                                placeholder="Ingresa la fecha de expiración"
+                                :inputStyle="'text-align:center;'"
+                            />
+                        </div>
+                        <div class="self-end w-full">
                             <p class="text-center">Cantidad</p>
                             <InputText
                                 class="w-full text-center text-lg text-white"
@@ -173,17 +181,6 @@
                             />
                         </div>
                         <div class="self-end w-full">
-                            <p class="text-center">Fecha de expiración</p>
-                            <Calendar
-                                dateFormat="dd/mm/yy"
-                                class="w-full text-center text-lg text-white"
-                                v-model="valuesToPush.expiration_date"
-                                placeholder="Ingresa la fecha de expiración"
-                                :inputStyle="'text-align:center;'"
-                            />
-                        </div>
-
-                        <div class="self-end w-full">
                             <p class="text-center">Precio</p>
                             <InputText
                                 class="w-full text-center text-lg text-white"
@@ -191,6 +188,7 @@
                                 placeholder="Ingresa el precio"
                                 type="number"
                                 @change="nozero()"
+                                style="text-align: right"
                             />
                         </div>
                         <div class="self-end mb-1">
@@ -216,7 +214,12 @@
                         </div>
                     </div>
                 </template>
-                <Column field="number" header="Número de lote" :sortable="true">
+                <Column
+                    field="number"
+                    header="Número de lote"
+                    :sortable="true"
+                    style="display: none"
+                >
                 </Column>
                 <Column field="article_name" header="Articulo" :sortable="true">
                 </Column>
@@ -238,13 +241,42 @@
                             v-model="slotProps.data[slotProps.field]"
                         /> </template
                 ></Column>
-                <Column field="stock" header="Stock" :sortable="true"></Column>
-                <Column field="purchase_price" header="Precio" :sortable="true"
+                <Column
+                    field="stock"
+                    header="Stock"
+                    :sortable="true"
+                    style="display: none"
+                ></Column>
+                <Column
+                    class="priceTrash"
+                    field="purchase_price"
+                    header="Precio"
+                    :sortable="true"
+                    bodyStyle="text-align: right"
                     ><template #editor="slotProps">
                         <InputText
+                            style="text-align: right"
                             v-model="slotProps.data[slotProps.field]"
-                        /> </template
-                ></Column>
+                        />
+                    </template>
+                </Column>
+                <Column
+                    class="subtotalTrash"
+                    header="Subtotal"
+                    :sortable="true"
+                    bodyStyle="text-align: right"
+                    ><template #body="slotProps">
+                        {{
+                            slotProps.data.quantity *
+                            slotProps.data.purchase_price
+                        }}
+                    </template>
+                    <template #footer>
+                        <div class="ml-auto" style="text-align: right">
+                            Total: {{ values.total }}
+                        </div>
+                    </template>
+                </Column>
                 <Column
                     header="Eliminar"
                     field="number"
@@ -260,6 +292,7 @@
                     </template>
                 </Column>
                 <Column
+                    style="display: none"
                     header="Estado"
                     field="deleted_at"
                     v-if="Object.keys(details).length > 0"
@@ -590,5 +623,35 @@ export default {
     background-color: rgb(107 114 128) !important;
     opacity: 1 !important;
     color: white !important;
+}
+.subtotalTrash > .p-column-header-content,
+.priceTrash > .p-column-header-content {
+    display: inline-flex;
+    align-items: right;
+    margin-left: auto;
+}
+td.subtotalTrash,
+td.priceTrash {
+    text-align: right !important;
+    display: inline !important;
+}
+.p-datatable-tfoot > tr > td.subtotalTrash,
+.p-datatable-tfoot > tr > td.priceTrash {
+    display: inline-flex;
+    align-items: right;
+    margin-left: auto;
+    text-align: right !important;
+    display: inline !important;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 </style>

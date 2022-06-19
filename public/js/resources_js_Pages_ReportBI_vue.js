@@ -587,7 +587,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 24 24",
     stroke: "currentColor"
   }, _hoisted_7)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_TransparentDropDown, {
-    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName]],
+    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName], ['Reporte de Estado de Resultados', 'reportea.api.read', $props.companyName]],
     value: "Reportes"
   }, null, 8
   /* PROPS */

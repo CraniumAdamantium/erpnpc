@@ -40,8 +40,6 @@ class Item extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-
             'sale_price' => 'required|numeric',
             'id_company' => 'required|exists:companies,id_company',
             'categories' => 'required|array',
@@ -62,7 +60,6 @@ class Item extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
             'quantity' => 'required|numeric',
             'sale_price' => 'required|numeric',
             'id_company' => 'required|exists:companies,id_company',

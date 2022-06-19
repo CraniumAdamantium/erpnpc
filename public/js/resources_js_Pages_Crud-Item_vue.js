@@ -36,6 +36,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   directives: {
     tooltip: primevue_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"]
@@ -46,7 +47,8 @@ __webpack_require__.r(__webpack_exports__);
     Column: primevue_column__WEBPACK_IMPORTED_MODULE_4__["default"],
     DataTable: primevue_datatable__WEBPACK_IMPORTED_MODULE_3__["default"],
     Navbar: _SimpleTemplates_Navbar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    InputText: primevue_inputtext__WEBPACK_IMPORTED_MODULE_5__["default"]
+    InputText: primevue_inputtext__WEBPACK_IMPORTED_MODULE_5__["default"],
+    InputNumber: primevue_inputtext__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   props: {
     userData: {
@@ -154,11 +156,6 @@ __webpack_require__.r(__webpack_exports__);
 
       if (values.name == "" || values.name.length < 3) {
         notiflix__WEBPACK_IMPORTED_MODULE_8__.Notify.failure("El nombre debe tener al menos 3 caracteres");
-        paso = false;
-      }
-
-      if (values.description == "" || values.description.length < 3) {
-        notiflix__WEBPACK_IMPORTED_MODULE_8__.Notify.failure("La descripción debe tener al menos 3 caracteres");
         paso = false;
       }
 
@@ -584,6 +581,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
 
+  var _component_InputNumber = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputNumber");
+
   var _component_MultiSelect = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("MultiSelect");
 
   var _component_Dialog = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Dialog");
@@ -747,14 +746,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         })
       }, null, 8
       /* PROPS */
-      , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputText, {
+      , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
         "class": "w-full",
         type: "number",
         placeholder: "Precio de venta para el item",
         modelValue: $setup.values.sale_price,
         "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
           return $setup.values.sale_price = $event;
-        })
+        }),
+        style: {
+          "text-align": "right"
+        },
+        step: ".01"
       }, null, 8
       /* PROPS */
       , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_MultiSelect, {
@@ -1009,7 +1012,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 24 24",
     stroke: "currentColor"
   }, _hoisted_7)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_TransparentDropDown, {
-    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName]],
+    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName], ['Reporte de Estado de Resultados', 'reportea.api.read', $props.companyName]],
     value: "Reportes"
   }, null, 8
   /* PROPS */
@@ -1177,7 +1180,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.preciotrucho > .p-column-header-content {\n    display: inline-flex;\n    align-items: right;\n    margin-left: auto;\n}\ntd.preciotrucho {\n    text-align: right !important;\n    display: inline !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.preciotrucho > .p-column-header-content {\n    display: inline-flex;\n    align-items: right;\n    margin-left: auto;\n}\ntd.preciotrucho {\n    text-align: right !important;\n    display: inline !important;\n}\n/* Chrome, Safari, Edge, Opera */\ninput::-webkit-outer-spin-button,\ninput::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n    margin: 0;\n}\n\n/* Firefox */\ninput[type=\"number\"] {\n    -moz-appearance: textfield;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -61,8 +61,16 @@ class Category extends Controller
     }
     public function delete(Request $request)
     {
+        $request->validate([
+            'id' => 'required|exists:categories,id_category',
+        ]);
         $category = Categories::find($request->id);
-        $category->delete();
-        return back()->with('success', 'Categoria eliminada correctamente');
+        /* No childs */
+        $child = Categories::where('id_parent_category', $category->id_category)->first();
+        if (!$child) {
+            $category->delete();
+            return back()->with('success', 'Categoria eliminada correctamente');
+        }
+        return back()->withErrors(['error' => 'No se puede eliminar la categoria porque tiene subcategorias']);
     }
 }

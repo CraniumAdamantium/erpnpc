@@ -515,6 +515,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
         "class": "min-w-fit w-3 text-white disabled:bg-gray-500 bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2.5",
         disabled: Object.keys((_$setup$values$select2 = $setup.values.selectedNote) !== null && _$setup$values$select2 !== void 0 ? _$setup$values$select2 : {}).length == 0,
+        style: {
+          "display": "none"
+        },
         onClick: _cache[4] || (_cache[4] = function ($event) {
           return $setup.deleteNote();
         })
@@ -570,7 +573,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onGoback: _cache[7] || (_cache[7] = function ($event) {
       return $setup["goto"]();
     }),
-    details: $setup.values.selectedNote
+    details: $setup.values.selectedNote,
+    onDelete: _cache[8] || (_cache[8] = function ($event) {
+      return $setup.deleteNote();
+    })
   }, null, 8
   /* PROPS */
   , ["company", "userData", "details"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.values.showC ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_DetailsNC, {
@@ -578,10 +584,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     company: $props.company,
     userData: $props.userData,
     details: $setup.values.selectedNote,
-    onGoback: _cache[8] || (_cache[8] = function ($event) {
+    onGoback: _cache[9] || (_cache[9] = function ($event) {
       return $setup["goto"]();
     }),
-    onDelete: _cache[9] || (_cache[9] = function ($event) {
+    onDelete: _cache[10] || (_cache[10] = function ($event) {
       return $setup.deleteNote();
     })
   }, null, 8
@@ -740,7 +746,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 24 24",
     stroke: "currentColor"
   }, _hoisted_7)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_TransparentDropDown, {
-    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName]],
+    list: [['Reporte de Libro Diario', 'reportld.api.read', $props.companyName], ['Reporte de Libro Mayor', 'reportlm.api.read', $props.companyName], ['Reporte de Balance Inicial', 'reportbi.api.read', $props.companyName], ['Comprobación de Sumas y Saldos', 'reportss.api.read', $props.companyName], ['Reporte de Estado de Resultados', 'reportea.api.read', $props.companyName]],
     value: "Reportes"
   }, null, 8
   /* PROPS */

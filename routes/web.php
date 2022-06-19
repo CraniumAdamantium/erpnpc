@@ -40,6 +40,8 @@ Route::get('/pruebita', [Credentials::class, 'pruebita'])->name('pruebita')->mid
 
 //Jasper
 Route::get('/reporte/estado_resultados', [Reportes::class, 'estado_resultados'])->name('reporte_estado_resultados');
+Route::post('/reporte/balance_inicial/', [Reportes::class, 'balance_inicial'])->name('reporte_balance_inicial');
+Route::post('/reporte/balance_general/', [Reportes::class, 'balance_general'])->name('reporte_balance_general');
 
 
 Route::get('/hash/{hashThis}', function ($hashThis) {
@@ -86,6 +88,7 @@ Route::middleware(['isLoggedIn'])->group(function () {
         Route::post('/api/receipt/create', 'create')->name('receipt.api.create');
         Route::post('/api/receipt/getLastserial_number', 'getLastserial_number')->name('receipt.api.getLastserial_number');
         Route::post('/api/receipt/delete', 'delete')->name('receipt.api.delete');
+        Route::post('/api/receipt/getReceiptNotes', 'getNotes')->name('receipt.api.getReceiptNotes');
     });
     //UserData
     Route::get('/api/user/data', [Credentials::class, 'getCurrentUserData'])->name('user.data');
@@ -116,6 +119,9 @@ Route::middleware(['isLoggedIn'])->group(function () {
         route::get('/api/reports/readrtlm/{name}', 'readrtlm')->name('reportlm.api.read');
         route::get('/api/reports/readrtbi/{name}', 'readrtbi')->name('reportbi.api.read');
         route::get('/api/reports/readrtss/{name}', 'readrtss')->name('reportss.api.read');
+        route::get('/api/reports/readrtea/{name}', 'readrtea')->name('reportea.api.read');
+
+
     });
     // Categories
     Route::controller(Category::class)->group(function () {
